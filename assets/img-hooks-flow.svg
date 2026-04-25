@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200"
+     font-family="'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif">
+
+  <!-- 배경 -->
+  <rect width="800" height="200" fill="#EFF6FF" rx="12"/>
+
+  <!-- 제목 -->
+  <text x="400" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#1E3A8A" letter-spacing=".5">
+    Hooks 실행 흐름 — Claude 행동 전·후 자동 제어
+  </text>
+
+  <!-- Claude 요청 박스 -->
+  <rect x="20" y="38" width="110" height="50" rx="10" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1.5"/>
+  <text x="75" y="60" text-anchor="middle" font-size="10" font-weight="700" fill="#1E3A8A">Claude</text>
+  <text x="75" y="76" text-anchor="middle" font-size="9" fill="#1E40AF">도구 실행 요청</text>
+
+  <!-- 화살표 -->
+  <line x1="130" y1="63" x2="155" y2="63" stroke="#2563EB" stroke-width="1.5"/>
+  <polygon points="155,59 163,63 155,67" fill="#2563EB"/>
+
+  <!-- PreToolUse 박스 -->
+  <rect x="163" y="38" width="120" height="50" rx="10" fill="#1E3A8A" stroke="#1E3A8A" stroke-width="1.5"/>
+  <text x="223" y="57" text-anchor="middle" font-size="10" font-weight="700" fill="white">PreToolUse</text>
+  <text x="223" y="72" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.85)">도구 실행 직전 훅</text>
+
+  <!-- exit 분기 화살표들 -->
+  <!-- exit 0 → 허용 -->
+  <line x1="283" y1="63" x2="308" y2="63" stroke="#10B981" stroke-width="1.5"/>
+  <polygon points="308,59 316,63 308,67" fill="#10B981"/>
+
+  <!-- 도구 실행 박스 -->
+  <rect x="316" y="38" width="110" height="50" rx="10" fill="white" stroke="#DBEAFE" stroke-width="1.5"/>
+  <text x="371" y="60" text-anchor="middle" font-size="10" font-weight="700" fill="#1E3A8A">도구 실행</text>
+  <text x="371" y="75" text-anchor="middle" font-size="9" fill="#64748B">Bash / Write 등</text>
+
+  <!-- exit 2 차단 화살표 (위로) -->
+  <line x1="223" y1="38" x2="223" y2="22" stroke="#EF4444" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <polygon points="219,22 223,14 227,22" fill="#EF4444"/>
+  <rect x="163" y="2" width="120" height="14" rx="4" fill="#FEE2E2"/>
+  <text x="223" y="13" text-anchor="middle" font-size="8.5" font-weight="700" fill="#B91C1C">exit 2 → 강제 차단</text>
+
+  <!-- exit 1 경고 표시 -->
+  <rect x="163" y="96" width="120" height="14" rx="4" fill="#FEF3C7"/>
+  <text x="223" y="107" text-anchor="middle" font-size="8.5" font-weight="700" fill="#B45309">exit 1 → 경고·진행</text>
+  <line x1="223" y1="88" x2="223" y2="96" stroke="#F59E0B" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <polygon points="219,96 223,104 227,96" fill="#F59E0B"/>
+
+  <!-- 화살표 도구실행 → PostToolUse -->
+  <line x1="426" y1="63" x2="451" y2="63" stroke="#2563EB" stroke-width="1.5"/>
+  <polygon points="451,59 459,63 451,67" fill="#2563EB"/>
+
+  <!-- PostToolUse 박스 -->
+  <rect x="459" y="38" width="120" height="50" rx="10" fill="#1E3A8A" stroke="#1E3A8A" stroke-width="1.5"/>
+  <text x="519" y="57" text-anchor="middle" font-size="10" font-weight="700" fill="white">PostToolUse</text>
+  <text x="519" y="72" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.85)">도구 실행 직후 훅</text>
+
+  <!-- PostToolUse → 로깅/알림 -->
+  <line x1="579" y1="63" x2="604" y2="63" stroke="#2563EB" stroke-width="1.5"/>
+  <polygon points="604,59 612,63 604,67" fill="#2563EB"/>
+
+  <!-- 로깅/알림 박스 -->
+  <rect x="612" y="38" width="110" height="50" rx="10" fill="#D1FAE5" stroke="#6EE7B7" stroke-width="1.5"/>
+  <text x="667" y="58" text-anchor="middle" font-size="10" font-weight="700" fill="#065F46">로그 기록</text>
+  <text x="667" y="72" text-anchor="middle" font-size="9" fill="#065F46">/ 슬랙 알림</text>
+
+  <!-- Stop Hook 섹션 -->
+  <rect x="20" y="128" width="760" height="56" rx="10" fill="white" stroke="#DBEAFE" stroke-width="1.5"/>
+  <text x="400" y="148" text-anchor="middle" font-size="10" font-weight="700" fill="#1E3A8A">Stop Hook (작업 완전 완료 시) + SubagentStop (서브에이전트 완료 시)</text>
+
+  <!-- Stop 예시들 -->
+  <rect x="40" y="156" width="170" height="20" rx="5" fill="#EFF6FF"/>
+  <text x="125" y="170" text-anchor="middle" font-size="8.5" fill="#1E3A8A">✅ Slack 완료 알림 전송</text>
+  <rect x="226" y="156" width="170" height="20" rx="5" fill="#EFF6FF"/>
+  <text x="311" y="170" text-anchor="middle" font-size="8.5" fill="#1E3A8A">📊 작업 결과 DB 자동 저장</text>
+  <rect x="412" y="156" width="170" height="20" rx="5" fill="#EFF6FF"/>
+  <text x="497" y="170" text-anchor="middle" font-size="8.5" fill="#1E3A8A">🧹 임시 파일 자동 정리</text>
+  <rect x="598" y="156" width="165" height="20" rx="5" fill="#EFF6FF"/>
+  <text x="680" y="170" text-anchor="middle" font-size="8.5" fill="#1E3A8A">📝 서브에이전트 결과 수집</text>
+
+</svg>

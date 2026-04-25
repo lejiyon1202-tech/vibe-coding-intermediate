@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200"
+     font-family="'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif">
+
+  <!-- 배경 -->
+  <rect width="800" height="200" fill="#EFF6FF" rx="12"/>
+
+  <!-- 제목 -->
+  <text x="400" y="20" text-anchor="middle" font-size="11" font-weight="700" fill="#1E3A8A" letter-spacing=".5">
+    Subagents 병렬 실행 — 오케스트레이터가 전문 에이전트를 동시에 투입
+  </text>
+
+  <!-- 오케스트레이터 -->
+  <rect x="290" y="34" width="220" height="52" rx="12" fill="#1E3A8A"/>
+  <text x="400" y="56" text-anchor="middle" font-size="11" font-weight="800" fill="white">🎯 오케스트레이터</text>
+  <text x="400" y="72" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.85)">태스크 분해 · 에이전트 배분 · 결과 통합</text>
+
+  <!-- 분기 화살표들 -->
+  <line x1="330" y1="86" x2="175" y2="116" stroke="#2563EB" stroke-width="1.5"/>
+  <polygon points="171,111 172,119 179,114" fill="#2563EB"/>
+  <line x1="400" y1="86" x2="400" y2="116" stroke="#2563EB" stroke-width="1.5"/>
+  <polygon points="396,116 400,124 404,116" fill="#2563EB"/>
+  <line x1="470" y1="86" x2="625" y2="116" stroke="#2563EB" stroke-width="1.5"/>
+  <polygon points="621,111 629,114 622,119" fill="#2563EB"/>
+
+  <!-- 서브에이전트 A -->
+  <rect x="60" y="124" width="230" height="52" rx="10" fill="white" stroke="#DBEAFE" stroke-width="2"/>
+  <text x="175" y="143" text-anchor="middle" font-size="10" font-weight="700" fill="#1E3A8A">🔍 리서치 에이전트</text>
+  <text x="175" y="158" text-anchor="middle" font-size="8.5" fill="#64748B">Explore / 웹 검색 / 문서 분석</text>
+  <rect x="80" y="164" width="90" height="8" rx="3" fill="#DBEAFE"/>
+  <text x="125" y="171" text-anchor="middle" font-size="7.5" fill="#1E3A8A">병렬 실행 중...</text>
+
+  <!-- 서브에이전트 B -->
+  <rect x="285" y="124" width="230" height="52" rx="10" fill="white" stroke="#DBEAFE" stroke-width="2"/>
+  <text x="400" y="143" text-anchor="middle" font-size="10" font-weight="700" fill="#1E3A8A">✍️ 코딩 에이전트</text>
+  <text x="400" y="158" text-anchor="middle" font-size="8.5" fill="#64748B">Plan / 구현 / 테스트</text>
+  <rect x="305" y="164" width="90" height="8" rx="3" fill="#DBEAFE"/>
+  <text x="350" y="171" text-anchor="middle" font-size="7.5" fill="#1E3A8A">병렬 실행 중...</text>
+
+  <!-- 서브에이전트 C -->
+  <rect x="510" y="124" width="230" height="52" rx="10" fill="white" stroke="#DBEAFE" stroke-width="2"/>
+  <text x="625" y="143" text-anchor="middle" font-size="10" font-weight="700" fill="#1E3A8A">📝 리뷰 에이전트</text>
+  <text x="625" y="158" text-anchor="middle" font-size="8.5" fill="#64748B">code-reviewer / QA / 감사</text>
+  <rect x="545" y="164" width="90" height="8" rx="3" fill="#DBEAFE"/>
+  <text x="590" y="171" text-anchor="middle" font-size="7.5" fill="#1E3A8A">병렬 실행 중...</text>
+
+  <!-- 결과 통합 화살표 -->
+  <line x1="175" y1="176" x2="175" y2="192" stroke="#10B981" stroke-width="1.5"/>
+  <line x1="400" y1="176" x2="400" y2="192" stroke="#10B981" stroke-width="1.5"/>
+  <line x1="625" y1="176" x2="625" y2="192" stroke="#10B981" stroke-width="1.5"/>
+  <line x1="175" y1="192" x2="625" y2="192" stroke="#10B981" stroke-width="1.5"/>
+
+  <!-- 결과 레이블 -->
+  <text x="400" y="198" text-anchor="middle" font-size="8.5" fill="#059669" font-weight="700">
+    3개 에이전트 결과 동시 수집 → 오케스트레이터 통합 → 최종 산출물
+  </text>
+
+</svg>
