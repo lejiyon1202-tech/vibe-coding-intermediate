@@ -819,7 +819,7 @@ Kirkpatrick 4단계 평가 모델 적용.
       <span class="c-s">"matcher"</span>: <span class="c-s">"Bash"</span>,
       <span class="c-s">"hooks"</span>: [<span class="c-n">{</span>
         <span class="c-s">"type"</span>: <span class="c-s">"command"</span>,
-        <span class="c-s">"command"</span>: <span class="c-s">"if echo \"$CLAUDE_TOOL_INPUT\" | grep -q 'rm -rf'; then echo '위험 명령어 차단됨'; exit 2; fi"</span>
+        <span class="c-s">"command"</span>: <span class="c-s">"cmd=$(jq -r '.tool_input.command'); if echo \"$cmd\" | grep -q 'rm -rf'; then echo '위험 명령어 차단됨'; exit 2; fi"</span>
       <span class="c-n">}]</span>
     <span class="c-n">}]</span>,
     <span class="c-s">"PostToolUse"</span>: [<span class="c-n">{</span>
@@ -1652,7 +1652,7 @@ $ARGUMENTS 데이터를 먼저 분석:
       <span class="c-s">"matcher"</span>: <span class="c-s">"Write"</span>,
       <span class="c-s">"hooks"</span>: [<span class="c-n">{</span>
         <span class="c-s">"type"</span>: <span class="c-s">"command"</span>,
-        <span class="c-s">"command"</span>: <span class="c-s">"if echo \"$CLAUDE_TOOL_INPUT\" | grep -q '\\.env'; then echo '⛔ .env 수정 차단'; exit 2; fi"</span>
+        <span class="c-s">"command"</span>: <span class="c-s">"fp=$(jq -r '.tool_input.file_path // \"\"'); if echo \"$fp\" | grep -q '\\.env'; then echo '⛔ .env 수정 차단'; exit 2; fi"</span>
       <span class="c-n">}]</span>
     <span class="c-n">}]</span>,
     <span class="c-s">"Stop"</span>: [<span class="c-n">{</span>
