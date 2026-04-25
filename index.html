@@ -1983,7 +1983,7 @@ tools: [WebSearch, WebFetch]
           <div class="flow-num">Q9</div>
           <div>
             <div class="flow-ttl">Hooks에서 쓸 수 있는 환경변수는?</div>
-            <div class="flow-desc"><code style="font-family:var(--font-mono);font-size:12px">$CLAUDE_TOOL_NAME</code> · <code style="font-family:var(--font-mono);font-size:12px">$CLAUDE_TOOL_INPUT</code> · <code style="font-family:var(--font-mono);font-size:12px">$CLAUDE_TOOL_RESULT</code> · <code style="font-family:var(--font-mono);font-size:12px">$CLAUDE_TOOL_INPUT_FILE_PATH</code>. 상세 목록: <code style="font-family:var(--font-mono);font-size:12px">code.claude.com/docs/en/hooks</code></div>
+            <div class="flow-desc">환경변수가 아닌 <strong>stdin JSON 페이로드</strong>로 도구 정보를 받습니다. 파싱 예시: <code style="font-family:var(--font-mono);font-size:12px">jq -r '.tool_input.command'</code>. 페이로드 필드: <code style="font-family:var(--font-mono);font-size:12px">tool_name</code> · <code style="font-family:var(--font-mono);font-size:12px">tool_input</code> · <code style="font-family:var(--font-mono);font-size:12px">tool_response</code>. 공식 환경변수는 <code style="font-family:var(--font-mono);font-size:12px">$CLAUDE_PROJECT_DIR</code> · <code style="font-family:var(--font-mono);font-size:12px">$CLAUDE_PLUGIN_ROOT</code> 등 별도. 상세: <code style="font-family:var(--font-mono);font-size:12px">code.claude.com/docs/en/hooks</code></div>
           </div>
         </div>
         <div class="flow-item">
