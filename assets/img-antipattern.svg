@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 210"
+     font-family="'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif">
+
+  <!-- 배경 -->
+  <rect width="800" height="210" fill="#EFF6FF" rx="12"/>
+
+  <!-- 제목 -->
+  <text x="400" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#1E3A8A" letter-spacing=".5">
+    안티패턴 vs 베스트 프랙티스 — 실무자가 자주 틀리는 5가지
+  </text>
+
+  <!-- 헤더 -->
+  <rect x="30" y="34" width="355" height="28" rx="8" fill="#FEE2E2" stroke="#FCA5A5" stroke-width="1.5"/>
+  <text x="207" y="52" text-anchor="middle" font-size="10" font-weight="700" fill="#991B1B">❌ 안티패턴</text>
+  <rect x="415" y="34" width="355" height="28" rx="8" fill="#D1FAE5" stroke="#6EE7B7" stroke-width="1.5"/>
+  <text x="592" y="52" text-anchor="middle" font-size="10" font-weight="700" fill="#065F46">✅ 베스트 프랙티스</text>
+
+  <!-- 구분선 -->
+  <line x1="400" y1="34" x2="400" y2="200" stroke="#DBEAFE" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- 행 1 -->
+  <rect x="30" y="68" width="355" height="24" rx="5" fill="white" stroke="#FCA5A5" stroke-width="1"/>
+  <text x="207" y="84" text-anchor="middle" font-size="8.5" fill="#7F1D1D">매번 긴 배경 설명을 반복해서 입력</text>
+  <rect x="415" y="68" width="355" height="24" rx="5" fill="white" stroke="#6EE7B7" stroke-width="1"/>
+  <text x="592" y="84" text-anchor="middle" font-size="8.5" fill="#065F46">CLAUDE.md에 컨텍스트 한 번만 정의 → 재사용</text>
+
+  <!-- 행 2 -->
+  <rect x="30" y="98" width="355" height="24" rx="5" fill="white" stroke="#FCA5A5" stroke-width="1"/>
+  <text x="207" y="114" text-anchor="middle" font-size="8.5" fill="#7F1D1D">"코드 짜줘" — 모호한 한 줄 지시</text>
+  <rect x="415" y="98" width="355" height="24" rx="5" fill="white" stroke="#6EE7B7" stroke-width="1"/>
+  <text x="592" y="114" text-anchor="middle" font-size="8.5" fill="#065F46">입력·출력·조건·제약을 구체적으로 명시</text>
+
+  <!-- 행 3 -->
+  <rect x="30" y="128" width="355" height="24" rx="5" fill="#FEE2E2" stroke="#FCA5A5" stroke-width="1"/>
+  <text x="207" y="144" text-anchor="middle" font-size="8.5" fill="#7F1D1D">결과물을 그대로 복붙 → 검토 없이 사용</text>
+  <rect x="415" y="128" width="355" height="24" rx="5" fill="#D1FAE5" stroke="#6EE7B7" stroke-width="1"/>
+  <text x="592" y="144" text-anchor="middle" font-size="8.5" fill="#065F46">반드시 직접 실행 · 검증 후 사용</text>
+
+  <!-- 행 4 -->
+  <rect x="30" y="158" width="355" height="24" rx="5" fill="white" stroke="#FCA5A5" stroke-width="1"/>
+  <text x="207" y="174" text-anchor="middle" font-size="8.5" fill="#7F1D1D">한 대화에 모든 작업 몰아서 요청</text>
+  <rect x="415" y="158" width="355" height="24" rx="5" fill="white" stroke="#6EE7B7" stroke-width="1"/>
+  <text x="592" y="174" text-anchor="middle" font-size="8.5" fill="#065F46">단계별 분리 요청 → 확인 후 다음 단계</text>
+
+  <!-- 행 5 -->
+  <rect x="30" y="183" width="355" height="20" rx="5" fill="white" stroke="#FCA5A5" stroke-width="1"/>
+  <text x="207" y="197" text-anchor="middle" font-size="8.5" fill="#7F1D1D">AI가 틀렸을 때 그냥 포기 · 재시도 없음</text>
+  <rect x="415" y="183" width="355" height="20" rx="5" fill="white" stroke="#6EE7B7" stroke-width="1"/>
+  <text x="592" y="197" text-anchor="middle" font-size="8.5" fill="#065F46">구체적 피드백으로 수정 요청 → 반복 개선</text>
+
+</svg>

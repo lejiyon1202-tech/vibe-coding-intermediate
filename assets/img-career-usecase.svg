@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 220"
+     font-family="'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif">
+
+  <!-- 배경 -->
+  <rect width="800" height="220" fill="#EFF6FF" rx="12"/>
+
+  <!-- 제목 -->
+  <text x="400" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#1E3A8A" letter-spacing=".5">
+    직군별 Claude Code 실무 활용 케이스 맵
+  </text>
+
+  <!-- 중앙: Claude Code -->
+  <circle cx="400" cy="110" r="38" fill="#1E3A8A"/>
+  <text x="400" y="105" text-anchor="middle" font-size="11" font-weight="800" fill="white">Claude</text>
+  <text x="400" y="120" text-anchor="middle" font-size="11" font-weight="800" fill="white">Code</text>
+
+  <!-- 연결선 -->
+  <line x1="364" y1="85" x2="222" y2="58" stroke="#93C5FD" stroke-width="1.5"/>
+  <line x1="364" y1="130" x2="222" y2="162" stroke="#93C5FD" stroke-width="1.5"/>
+  <line x1="436" y1="85" x2="578" y2="58" stroke="#93C5FD" stroke-width="1.5"/>
+  <line x1="436" y1="130" x2="578" y2="162" stroke="#93C5FD" stroke-width="1.5"/>
+
+  <!-- 개발자 카드 (좌상) -->
+  <rect x="60" y="34" width="164" height="70" rx="10" fill="white" stroke="#DBEAFE" stroke-width="2"/>
+  <text x="142" y="52" text-anchor="middle" font-size="11">💻</text>
+  <text x="142" y="66" text-anchor="middle" font-size="10" font-weight="700" fill="#1E3A8A">개발자</text>
+  <text x="142" y="79" text-anchor="middle" font-size="8.5" fill="#64748B">코드 리뷰 · PR 요약</text>
+  <text x="142" y="91" text-anchor="middle" font-size="8.5" fill="#64748B">테스트 자동화</text>
+
+  <!-- HR/HRD 카드 (좌하) -->
+  <rect x="60" y="138" width="164" height="70" rx="10" fill="white" stroke="#DBEAFE" stroke-width="2"/>
+  <text x="142" y="156" text-anchor="middle" font-size="11">🎓</text>
+  <text x="142" y="170" text-anchor="middle" font-size="10" font-weight="700" fill="#1E3A8A">HR / HRD</text>
+  <text x="142" y="183" text-anchor="middle" font-size="8.5" fill="#64748B">교육 기획 · 역량 평가</text>
+  <text x="142" y="195" text-anchor="middle" font-size="8.5" fill="#64748B">설문 분석 자동화</text>
+
+  <!-- 기획자 카드 (우상) -->
+  <rect x="576" y="34" width="164" height="70" rx="10" fill="#2563EB"/>
+  <text x="658" y="52" text-anchor="middle" font-size="11">📋</text>
+  <text x="658" y="66" text-anchor="middle" font-size="10" font-weight="800" fill="white">기획자</text>
+  <text x="658" y="79" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,0.9)">문서 초안 · 보고서 자동화</text>
+  <text x="658" y="91" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,0.9)">기획서 · 제안서 작성</text>
+
+  <!-- 리더 카드 (우하) -->
+  <rect x="576" y="138" width="164" height="70" rx="10" fill="#2563EB"/>
+  <text x="658" y="156" text-anchor="middle" font-size="11">🏆</text>
+  <text x="658" y="170" text-anchor="middle" font-size="10" font-weight="800" fill="white">리더 / 관리자</text>
+  <text x="658" y="183" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,0.9)">회의록 · 성과 보고</text>
+  <text x="658" y="195" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,0.9)">팀 커뮤니케이션 정리</text>
+
+  <!-- 공통 설명 -->
+  <text x="400" y="200" text-anchor="middle" font-size="9" fill="#64748B">직군 무관 공통 기반 — CLAUDE.md · Skills · Hooks · Subagents · MCP</text>
+
+</svg>

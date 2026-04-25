@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 190"
+     font-family="'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif">
+
+  <!-- 배경 -->
+  <rect width="800" height="190" fill="#EFF6FF" rx="12"/>
+
+  <!-- 제목 -->
+  <text x="400" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#1E3A8A" letter-spacing=".5">
+    AI 도입 전 · 후 업무 흐름 비교
+  </text>
+
+  <!-- Before 영역 -->
+  <rect x="30" y="34" width="340" height="144" rx="10" fill="white" stroke="#DBEAFE" stroke-width="2"/>
+  <rect x="30" y="34" width="340" height="32" rx="10" fill="#94A3B8"/>
+  <rect x="30" y="50" width="340" height="16" fill="#94A3B8"/>
+  <text x="200" y="56" text-anchor="middle" font-size="11" font-weight="700" fill="white">😓 Before — AI 도입 전</text>
+
+  <!-- Before 스텝들 -->
+  <rect x="50" y="80" width="300" height="26" rx="6" fill="#F1F5F9"/>
+  <text x="200" y="97" text-anchor="middle" font-size="9" fill="#475569">① 구글링 + 스택오버플로우 검색 (30분~)</text>
+
+  <rect x="50" y="112" width="300" height="26" rx="6" fill="#F1F5F9"/>
+  <text x="200" y="129" text-anchor="middle" font-size="9" fill="#475569">② 코드 직접 작성 · 수동 디버깅 (1~2시간)</text>
+
+  <rect x="50" y="144" width="300" height="26" rx="6" fill="#FEE2E2" stroke="#FCA5A5" stroke-width="1"/>
+  <text x="200" y="161" text-anchor="middle" font-size="9" fill="#991B1B">③ 반복 수정 · 동료 검토 요청 (추가 30분~)</text>
+
+  <!-- 화살표 중앙 -->
+  <polygon points="390,102 415,110 390,118" fill="#2563EB"/>
+  <line x1="370" y1="110" x2="413" y2="110" stroke="#2563EB" stroke-width="2"/>
+  <text x="392" y="130" text-anchor="middle" font-size="8" fill="#2563EB" font-weight="700">AI</text>
+  <text x="392" y="141" text-anchor="middle" font-size="8" fill="#2563EB" font-weight="700">도입</text>
+
+  <!-- After 영역 -->
+  <rect x="430" y="34" width="340" height="144" rx="10" fill="white" stroke="#DBEAFE" stroke-width="2"/>
+  <rect x="430" y="34" width="340" height="32" rx="10" fill="#1E3A8A"/>
+  <rect x="430" y="50" width="340" height="16" fill="#1E3A8A"/>
+  <text x="600" y="56" text-anchor="middle" font-size="11" font-weight="700" fill="white">⚡ After — AI 도입 후</text>
+
+  <!-- After 스텝들 -->
+  <rect x="450" y="80" width="300" height="26" rx="6" fill="#DBEAFE"/>
+  <text x="600" y="97" text-anchor="middle" font-size="9" fill="#1E3A8A">① CLAUDE.md에 컨텍스트 설정 (1회·재사용)</text>
+
+  <rect x="450" y="112" width="300" height="26" rx="6" fill="#DBEAFE"/>
+  <text x="600" y="129" text-anchor="middle" font-size="9" fill="#1E3A8A">② Claude Code에 자연어 요청 (5분)</text>
+
+  <rect x="450" y="144" width="300" height="26" rx="6" fill="#D1FAE5" stroke="#6EE7B7" stroke-width="1"/>
+  <text x="600" y="161" text-anchor="middle" font-size="9" fill="#065F46">③ 검토 · 개선 요청 · 완료 (10~15분)</text>
+
+</svg>

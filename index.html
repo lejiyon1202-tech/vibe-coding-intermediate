@@ -1,0 +1,1764 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>바이브 코딩 중급 — Claude Code 실무 적용 마스터</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+:root{
+  --bg:#EEF2F9;
+  --surface:#FFFFFF;
+  --s2:#F4F7FD;
+  --text:#0F172A;
+  --text2:#334155;
+  --blue:#2563EB;
+  --blue-strong:#1D4ED8;
+  --slate:#64748B;
+  --text-sub:var(--slate);
+  --border:#D6E0EF;
+  --bhi:rgba(37,99,235,.18);
+  --cover:#F0F6FF;
+  --code-bg:#1E293B;
+  --code-border:#334155;
+  --font-body:'Pretendard','Noto Sans KR',sans-serif;
+  --font-disp:'Syne',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --radius:14px;
+  --radius-sm:10px;
+  --gap-sm:12px;
+  --gap-md:14px;
+  --gap-lg:20px;
+  --slide-count:26;
+}
+
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);}
+body{font-family:var(--font-body);font-size:18px;line-height:1.6;color:var(--text);}
+
+.deck{
+  display:flex;
+  width:calc(var(--slide-count)*100vw);
+  height:100vh;
+  transition:transform .52s cubic-bezier(.4,0,.2,1);
+  will-change:transform;
+}
+
+.slide{
+  width:100vw;height:100vh;flex-shrink:0;position:relative;
+  overflow:hidden;display:flex;flex-direction:column;background:var(--bg);
+}
+
+.slide-topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 52px 0;flex-shrink:0;
+}
+
+.slide-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;padding:3px 11px;
+  border-radius:20px;border:1px solid var(--bhi);background:rgba(37,99,235,.07);
+  font-family:var(--font-disp);font-size:12px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--blue);
+}
+
+.slide-counter{font-family:var(--font-mono);font-size:12px;color:var(--slate);letter-spacing:.05em;}
+
+.slide-hdr{padding:14px 52px 0;flex-shrink:0;}
+.slide-hdr h1,.slide-hdr h2{
+  font-family:var(--font-disp);font-size:28px;font-weight:700;
+  line-height:1.2;letter-spacing:-.02em;color:var(--text);
+  padding-left:14px;border-left:4px solid var(--blue);
+}
+
+.slide-body{
+  flex:1;padding:16px 52px 40px;overflow:hidden;
+  display:flex;flex-direction:column;gap:var(--gap-md);min-height:0;
+}
+
+.slide-body--cols{flex-direction:row;align-items:stretch;gap:var(--gap-lg);}
+.col{flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--gap-md);}
+
+.slide-body>.g3,.slide-body>.g2,.slide-body>.flow,
+.slide-body>.sec-grid,.slide-body>.showcase,.slide-body>.tbl-wrap{flex:1;min-height:0;}
+.col>.diagram{flex:1;min-height:0;}
+
+.card,.g-card,.flow-item,.sec-card,.lab,.showcase-item,.tip,.info,.tbl-wrap,.diagram{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+}
+
+.card,.g-card,.flow-item,.sec-card,.lab,.showcase-item,.tip,.info{
+  padding:14px 16px;box-shadow:0 2px 8px rgba(0,0,0,.04);
+}
+
+.card,.g-card,.sec-card,.lab{display:flex;flex-direction:column;}
+.card--blue{background:rgba(37,99,235,.04);}
+.card--amber{background:rgba(245,158,11,.04);}
+.card--green{background:rgba(16,185,129,.04);}
+.card--red{background:rgba(239,68,68,.04);}
+.g-card--hi{border-top:3px solid var(--blue);background:rgba(37,99,235,.03);}
+
+.info--amber{border-left:3px solid #F59E0B;background:rgba(245,158,11,.04);}
+.info--warn{border-left:3px solid #EF4444;background:rgba(239,68,68,.04);}
+.info--green{border-left:3px solid #10B981;background:rgba(16,185,129,.04);}
+
+.card-title,.g-card__title,.flow-ttl,.sec-card__title,.lab__title{
+  font-family:var(--font-disp);font-size:16px;font-weight:700;line-height:1.35;
+  color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:6px;
+}
+.card-title::before,.g-card__title::before,.sec-card__title::before{
+  content:'';display:inline-block;width:3px;height:13px;
+  background:var(--blue);border-radius:2px;flex-shrink:0;
+}
+
+.card-body,.g-card__body,.flow-desc,.lab__body,.tip,.info__body,.showcase-name,
+.showcase-tech,.tbl,.tbl td,.tbl th{font-size:16px;}
+
+.card-body,.g-card__body,.flow-desc,.lab__body,.info__body,.showcase-tech,.sec-card__list li,.tl-desc{
+  line-height:1.65;color:var(--slate);
+}
+
+.card-body{color:var(--text);flex:1;}
+.card-body em,.tip strong,.lab__body code,.slide-eyebrow,.part-label,.hook-ev__type,.tl-time{color:var(--blue);}
+
+.info{display:flex;align-items:flex-start;gap:14px;border-left:3px solid var(--blue);border-radius:0 var(--radius) var(--radius) 0;}
+.info__icon,.g-card__icon,.sec-card__icon{font-size:22px;line-height:1;flex-shrink:0;}
+.info__ttl,.lab__tag{font-family:var(--font-disp);font-size:13px;font-weight:700;color:var(--blue);margin-bottom:6px;}
+.info--warn .info__ttl{color:#B91C1C;}
+.info--green .info__ttl{color:#059669;}
+
+.tbl-wrap{overflow:hidden;}
+.tbl{width:100%;border-collapse:collapse;}
+.tbl th{text-align:left;padding:12px 14px;font-family:var(--font-disp);font-weight:700;color:var(--blue);background:rgba(37,99,235,.06);border-bottom:1px solid var(--border);}
+.tbl td{padding:12px 14px;color:var(--text);border-bottom:1px solid var(--border);vertical-align:middle;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:rgba(37,99,235,.03);}
+
+.badge{
+  display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;
+  font-family:var(--font-disp);font-size:12px;font-weight:700;
+  color:var(--blue);background:rgba(37,99,235,.08);
+}
+.badge--green{color:#059669;background:rgba(16,185,129,.1);}
+.badge--amber{color:#B45309;background:rgba(245,158,11,.1);}
+.badge--red{color:#B91C1C;background:rgba(239,68,68,.1);}
+
+.code{
+  position:relative;overflow:hidden;
+  border:1px solid var(--code-border);border-radius:var(--radius);background:var(--code-bg);
+}
+.code__hdr{display:flex;align-items:center;gap:8px;padding:9px 14px;background:#0F172A;border-bottom:1px solid var(--code-border);}
+.code__dots{display:flex;gap:5px;}
+.code__dot{width:10px;height:10px;border-radius:50%;}
+.code__dot:nth-child(1){background:#EF4444;}
+.code__dot:nth-child(2){background:#F59E0B;}
+.code__dot:nth-child(3){background:#10B981;}
+.code__file{font-family:var(--font-mono);font-size:12px;color:#94A3B8;}
+.code__body pre{
+  padding:14px 16px;white-space:pre-wrap;word-break:break-all;
+  font-family:var(--font-mono);font-size:16px;line-height:1.65;color:#CBD5E1;
+}
+.c-k,.c-hl{color:#60A5FA;}
+.c-s{color:#34D399;}
+.c-n,.c-cm{color:#94A3B8;}
+.c-cm{font-style:italic;}
+
+.g3,.g2,.sec-grid,.hook-grid{display:grid;gap:var(--gap-md);align-items:stretch;}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr));}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr));}
+.sec-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
+.hook-grid{grid-template-columns:repeat(4,minmax(0,1fr));}
+.g-card__body,.card-body,.sec-card__list,.showcase,.flow{flex:1;}
+
+.flow{display:flex;flex-direction:column;gap:var(--gap-sm);}
+.flow-item{display:flex;align-items:flex-start;gap:14px;flex:1;}
+.flow-num{
+  width:28px;height:28px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  border-radius:50%;background:var(--blue);color:var(--bg);
+  font-family:var(--font-disp);font-size:13px;font-weight:700;
+}
+
+.part-label{
+  display:inline-flex;align-items:center;gap:8px;width:max-content;padding:5px 12px;
+  border-radius:999px;border:1px solid var(--border);background:var(--cover);
+  font-family:var(--font-disp);font-size:13px;font-weight:700;
+}
+
+.diagram{flex:1;padding:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.diagram img{width:100%;max-height:100%;object-fit:contain;}
+
+.sec-card__list{list-style:none;}
+.sec-card__list li{position:relative;padding:3px 0 3px 14px;font-size:16px;}
+.sec-card__list li::before{content:'▸';position:absolute;left:0;color:var(--blue);}
+
+.lab__body code{padding:2px 6px;border-radius:6px;background:rgba(37,99,235,.10);font-family:var(--font-mono);}
+
+/* 체크리스트 */
+.chk-list{display:flex;flex-direction:column;gap:6px;}
+.chk-list li{
+  display:flex;align-items:flex-start;gap:10px;padding:8px 12px;
+  border-radius:8px;background:var(--surface);border:1px solid var(--border);font-size:15px;
+}
+.chk-list li::before{
+  content:'☐';color:var(--blue);font-size:16px;flex-shrink:0;margin-top:1px;
+}
+.chk-list li.done::before{content:'✅';}
+
+/* 계층 스택 */
+.layer-stack{display:flex;flex-direction:column;gap:6px;}
+.layer-item{
+  display:flex;align-items:center;gap:12px;padding:10px 16px;
+  border-radius:var(--radius-sm);border:1px solid var(--border);
+  background:var(--surface);box-shadow:0 1px 4px rgba(0,0,0,.04);
+}
+.layer-item__num{
+  width:24px;height:24px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  border-radius:50%;background:var(--blue);color:#fff;
+  font-family:var(--font-disp);font-size:12px;font-weight:700;
+}
+.layer-item__label{font-family:var(--font-mono);font-size:13px;color:var(--blue);flex-shrink:0;min-width:220px;}
+.layer-item__desc{font-size:16px;color:var(--slate);line-height:1.6;}
+
+/* Hook 이벤트 카드 */
+.hook-ev{
+  border:1px solid var(--border);border-radius:var(--radius-sm);
+  background:var(--cover);padding:14px 16px;text-align:center;
+}
+.hook-ev__type{font-family:var(--font-mono);font-size:13px;font-weight:700;color:var(--blue);margin-bottom:4px;}
+.hook-ev__desc{font-size:13px;color:var(--slate);line-height:1.6;}
+
+/* exit code 필 */
+.exit-pill{
+  display:inline-flex;align-items:center;gap:6px;padding:4px 12px;
+  border-radius:999px;font-family:var(--font-mono);font-size:13px;font-weight:700;
+}
+.exit-pill--ok{background:rgba(16,185,129,.12);color:#059669;}
+.exit-pill--warn{background:rgba(245,158,11,.12);color:#B45309;}
+.exit-pill--block{background:rgba(239,68,68,.12);color:#B91C1C;}
+
+/* 직군 케이스 카드 */
+.case-card{
+  display:flex;flex-direction:column;gap:10px;padding:16px;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:0 2px 8px rgba(0,0,0,.04);
+}
+.case-card__tag{
+  display:inline-flex;align-items:center;gap:6px;padding:3px 10px;
+  border-radius:999px;font-size:12px;font-weight:700;font-family:var(--font-disp);
+  background:rgba(37,99,235,.08);color:var(--blue);width:fit-content;
+}
+.case-card h3{font-family:var(--font-disp);font-size:17px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.case-section{display:flex;flex-direction:column;gap:4px;}
+.case-label{font-size:12px;font-weight:700;font-family:var(--font-disp);letter-spacing:.06em;text-transform:uppercase;color:var(--slate);margin-bottom:2px;}
+.case-text{font-size:16px;color:var(--text2);line-height:1.6;}
+.case-impact{
+  display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;
+}
+.case-impact span{
+  display:inline-flex;align-items:center;gap:4px;padding:3px 10px;
+  border-radius:999px;font-size:12px;font-weight:600;
+  background:rgba(16,185,129,.1);color:#059669;
+}
+
+/* Cover */
+.slide--cover{background:var(--bg);}
+.slide--cover::before,.slide--cover::after{content:'';position:absolute;border-radius:50%;pointer-events:none;}
+.slide--cover::before{top:-260px;right:-180px;width:760px;height:760px;background:radial-gradient(circle,rgba(37,99,235,.12) 0%,rgba(37,99,235,0) 68%);}
+.slide--cover::after{bottom:-180px;left:-80px;width:560px;height:560px;background:radial-gradient(circle,rgba(37,99,235,.08) 0%,rgba(37,99,235,0) 68%);}
+.cover-inner{flex:1;position:relative;z-index:1;display:flex;flex-direction:column;justify-content:space-between;padding:48px 80px 36px;}
+.cover-tag{display:flex;align-items:center;gap:12px;font-family:var(--font-disp);font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);}
+.cover-tag::before{content:'';width:28px;height:2px;background:var(--blue);}
+.cover-h1{font-family:var(--font-disp);font-size:56px;font-weight:700;line-height:1.05;letter-spacing:-.04em;color:var(--text);}
+.cover-h1 span{background:linear-gradient(135deg,var(--blue) 0%,var(--blue-strong) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.cover-sub{max-width:680px;font-size:18px;line-height:1.75;color:var(--slate);}
+.cover-badges{display:flex;flex-wrap:wrap;gap:var(--gap-sm);}
+.cover-badge{padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(248,250,252,.92);font-family:var(--font-disp);font-size:13px;font-weight:600;color:var(--text);}
+.cover-badge--blue{color:var(--blue);}
+
+/* Nav */
+.nav-btn{
+  position:fixed;top:50%;z-index:200;width:48px;height:48px;
+  display:flex;align-items:center;justify-content:center;transform:translateY(-50%);
+  border-radius:50%;border:1px solid var(--border);background:rgba(248,250,252,.92);
+  color:var(--blue);font-size:22px;line-height:1;cursor:pointer;transition:all .2s ease;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  box-shadow:0 10px 24px rgba(37,99,235,.08);
+}
+.nav-btn:hover{background:rgba(37,99,235,.08);border-color:var(--blue);}
+.nav-btn:disabled{opacity:.28;cursor:default;}
+.nav-btn--prev{left:14px;}
+.nav-btn--next{right:14px;}
+
+.dots{position:fixed;left:50%;bottom:22px;z-index:200;display:flex;gap:7px;transform:translateX(-50%);}
+.dot{width:8px;height:8px;border-radius:999px;background:rgba(37,99,235,.20);cursor:pointer;transition:all .25s ease;}
+.dot--active{width:24px;background:var(--blue);}
+
+.prog-bar{position:fixed;left:0;bottom:0;z-index:200;width:100%;height:3px;background:var(--border);}
+.prog-fill{height:100%;background:var(--blue);transition:width .4s ease;}
+
+.lb-overlay{display:none;position:fixed;inset:0;z-index:9000;align-items:center;justify-content:center;cursor:zoom-out;background:rgba(30,41,59,.84);backdrop-filter:blur(4px);}
+.lb-overlay.lb-active{display:flex;}
+.lb-img{max-width:90vw;max-height:90vh;border-radius:10px;box-shadow:0 20px 80px rgba(30,41,59,.45);}
+.diagram img,.col img[src]{cursor:zoom-in;transition:opacity .15s ease,transform .15s ease;}
+.diagram img:hover,.col img[src]:hover{opacity:.85;transform:scale(1.02);}
+
+.copy-btn{
+  position:absolute;top:7px;right:9px;padding:3px 9px;
+  border:1px solid rgba(148,163,184,.3);border-radius:5px;
+  background:rgba(255,255,255,.07);color:#94A3B8;font-size:12px;line-height:1.6;cursor:pointer;transition:all .2s ease;
+}
+.copy-btn:hover{background:rgba(255,255,255,.14);color:#CBD5E1;}
+.copy-btn.copied{background:var(--blue);border-color:var(--blue);color:#fff;}
+
+@media(max-width:768px){
+  .slide-topbar,.slide-hdr,.slide-body{padding-left:20px;padding-right:20px;}
+  .slide-body--cols{flex-direction:column;}
+  .g3,.g2,.sec-grid,.hook-grid{grid-template-columns:1fr;}
+  .cover-inner{padding:32px 24px 28px;}
+  .cover-h1{font-size:40px;}
+  .nav-btn--prev{left:6px;}
+  .nav-btn--next{right:6px;}
+}
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+<!-- ── S01 표지 ── -->
+<div class="slide slide--cover" data-slide="1">
+  <div class="cover-inner">
+    <div class="cover-tag">리더스아카데미팀 · 바이브 코딩 중급</div>
+    <div>
+      <h1 class="cover-h1">Claude Code<br><span>실무 적용 마스터</span></h1>
+      <p class="cover-sub" style="margin-top:16px;">이런 경험 있으셨나요?<br>
+        "매번 같은 설명을 반복해서 입력한다" · "Claude가 내 스타일을 기억 못 한다" · "팀원마다 사용법이 제각각이다"<br>
+        <strong style="color:var(--blue)">오늘 이 세 가지가 전부 해결됩니다.</strong></p>
+    </div>
+    <div class="cover-badges">
+      <span class="cover-badge cover-badge--blue">📄 CLAUDE.md</span>
+      <span class="cover-badge cover-badge--blue">⚡ Skills</span>
+      <span class="cover-badge cover-badge--blue">🪝 Hooks</span>
+      <span class="cover-badge cover-badge--blue">🤖 Subagents</span>
+      <span class="cover-badge cover-badge--blue">🔌 MCP</span>
+      <span class="cover-badge">직군별 케이스 5종</span>
+      <span class="cover-badge">실습 체크리스트</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── S02 Agenda ── -->
+<div class="slide" data-slide="2">
+  <div class="slide-topbar">
+    <div class="slide-eyebrow">Agenda</div>
+    <div class="slide-counter">02 / 26</div>
+  </div>
+  <div class="slide-hdr"><h2>오늘 배우는 것 — 5단계 흐름</h2></div>
+  <div class="slide-body">
+    <div class="diagram">
+      <img src="assets/img-checklist-flow.svg" alt="Claude Code 실습 체크리스트 — 단계별 흐름">
+    </div>
+    <div class="g3">
+      <div class="card card--blue">
+        <div class="card-title">오늘 완료 목표</div>
+        <div class="card-body" style="font-size:16px;">
+          ① CLAUDE.md 자기 버전 작성<br>
+          ② Skills 명령어 1개 등록<br>
+          ③ Hooks 차단 규칙 1개 설정
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">전제 조건</div>
+        <div class="card-body" style="font-size:16px;">
+          ✅ Claude Code CLI 설치 완료<br>
+          ✅ 인증(claude login) 완료<br>
+          ✅ 기초 과정 수강 또는 기본 대화 경험
+        </div>
+      </div>
+      <div class="card card--green">
+        <div class="card-title">기대 효과</div>
+        <div class="card-body" style="font-size:16px;">
+          반복 입력 <strong>→ 0회</strong><br>
+          위험 명령 자동 차단<br>
+          직군별 맞춤 워크플로우
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S03 CLAUDE.md — WHAT ── -->
+<div class="slide" data-slide="3">
+  <div class="slide-topbar">
+    <div class="slide-eyebrow">CLAUDE.md — WHAT</div>
+    <div class="slide-counter">03 / 26</div>
+  </div>
+  <div class="slide-hdr"><h2>CLAUDE.md — Claude에게 보내는 영구 지시서</h2></div>
+  <div class="slide-body">
+    <div class="info">
+      <div class="info__icon">📄</div>
+      <div>
+        <div class="info__ttl">한 줄 정의</div>
+        <div class="info__body">새 대화를 시작할 때마다 Claude가 <strong>자동으로 읽는</strong> 마크다운 파일 — 역할·규칙·금지사항·선호 형식을 한 번만 써두면 매 대화에 적용됩니다.</div>
+      </div>
+    </div>
+    <div class="layer-stack">
+      <div class="layer-item">
+        <div class="layer-item__num">1</div>
+        <div class="layer-item__label">Managed Policy</div>
+        <div class="layer-item__desc">Anthropic 운영 기준 — <strong>변경 불가</strong>. 모든 층위 위에 있음.</div>
+      </div>
+      <div class="layer-item">
+        <div class="layer-item__num">2</div>
+        <div class="layer-item__label">Project <code style="font-size:12px">./CLAUDE.md</code></div>
+        <div class="layer-item__desc">팀 전체가 공유하는 프로젝트 설정. git에 커밋해서 팀 표준화.</div>
+      </div>
+      <div class="layer-item">
+        <div class="layer-item__num">3</div>
+        <div class="layer-item__label">User <code style="font-size:12px">~/.claude/CLAUDE.md</code></div>
+        <div class="layer-item__desc">내 모든 프로젝트에 적용되는 개인 설정. 습관·선호·금지어 등.</div>
+      </div>
+      <div class="layer-item">
+        <div class="layer-item__num">4</div>
+        <div class="layer-item__label">Local <code style="font-size:12px">.claude/CLAUDE.md</code></div>
+        <div class="layer-item__desc">gitignore 권장. 개인 민감 설정 (토큰, 로컬 경로 등).</div>
+      </div>
+    </div>
+    <div class="info info--green">
+      <div class="info__icon">✨</div>
+      <div>
+        <div class="info__ttl">Auto Memory (v2.1+)</div>
+        <div class="info__body"><code style="font-family:var(--font-mono);font-size:13px">~/.claude/projects/&lt;project&gt;/memory/MEMORY.md</code> — 대화 중 Claude가 자동으로 기억을 저장·불러오는 5번째 계층. 수동 작성 불필요.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S04 CLAUDE.md — HOW ── -->
+<div class="slide" data-slide="4">
+  <div class="slide-topbar">
+    <div class="slide-eyebrow">CLAUDE.md — HOW</div>
+    <div class="slide-counter">04 / 26</div>
+  </div>
+  <div class="slide-hdr"><h2>CLAUDE.md 기본 템플릿 — 지금 바로 복사하세요</h2></div>
+  <div class="slide-body slide-body--cols">
+    <div class="col">
+      <div class="code" style="flex:1;">
+        <div class="code__hdr">
+          <div class="code__dots"><span class="code__dot"></span><span class="code__dot"></span><span class="code__dot"></span></div>
+          <span class="code__file">CLAUDE.md</span>
+        </div>
+        <button class="copy-btn">복사</button>
+        <div class="code__body"><pre><span class="c-cm"># HR 업무 보조 — 나의 Claude 설정</span>
+
+<span class="c-k">## 역할</span>
+당신은 HR 전문가 보조 AI입니다.
+인사·교육·채용 관련 문서를 작성합니다.
+
+<span class="c-k">## 절대 규칙</span>
+- 개인정보(이름, 사번, 연봉)는 절대 출력 금지
+- 결론 먼저, 배경 나중 (두괄식 항상)
+- 한국어로만 답변
+
+<span class="c-k">## 선호 형식</span>
+- 교육 기획안: Kirkpatrick 4단계 구조
+- 보고서: 요약 → 상세 → 액션 아이템
+- 코드: 주석을 한국어로
+
+<span class="c-k">## 금지 표현</span>
+- "~인 것 같습니다" (단정하지 않는 표현)
+- "죄송합니다"로 시작하는 문장</pre></div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card card--blue">
+        <div class="card-title">필수 4섹션</div>
+        <div class="card-body" style="font-size:16px;">
+          <strong>역할(Role)</strong> — 어떤 전문가로 행동할지<br>
+          <strong>절대 규칙(Rules)</strong> — 반드시 지킬 것<br>
+          <strong>선호 형식(Format)</strong> — 출력 양식<br>
+          <strong>금지 표현(Banned)</strong> — 쓰면 안 되는 것
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">실무 팁</div>
+        <div class="card-body" style="font-size:16px;">
+          • 처음엔 3~5줄로 시작 — 길수록 좋은 게 아님<br>
+          • 3회 이상 같은 수정 요청 → CLAUDE.md에 규칙 추가<br>
+          • 팀 공용: git에 커밋 → 팀원 전원 동일 설정
+        </div>
+      </div>
+      <div class="info info--amber">
+        <div class="info__icon">⚠️</div>
+        <div>
+          <div class="info__ttl">주의</div>
+          <div class="info__body">파일 경로·API 키·개인 토큰은 <strong>절대 CLAUDE.md에 쓰지 마세요.</strong> 팀 공용 파일이면 git에 올라갑니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S05 CLAUDE.md — VALUE ── -->
+<div class="slide" data-slide="5">
+  <div class="slide-topbar">
+    <div class="slide-eyebrow">CLAUDE.md — VALUE</div>
+    <div class="slide-counter">05 / 26</div>
+  </div>
+  <div class="slide-hdr"><h2>CLAUDE.md 도입 전·후 — 업무 흐름이 이렇게 달라집니다</h2></div>
+  <div class="slide-body">
+    <div class="diagram">
+      <img src="assets/img-before-after.svg" alt="AI 도입 전·후 업무 흐름 비교">
+    </div>
+    <div class="g3">
+      <div class="card">
+        <div class="card-title">자가진단 1</div>
+        <div class="card-body" style="font-size:16px;">매 대화마다 "너는 HR 전문가야…" 같은 배경 설명을 반복 입력하고 있다면?<br><span class="badge badge--red" style="margin-top:6px">CLAUDE.md 미사용</span></div>
+      </div>
+      <div class="card card--blue">
+        <div class="card-title">자가진단 2</div>
+        <div class="card-body" style="font-size:16px;">팀원 A는 Claude가 친절하게 답하고, 팀원 B는 딱딱하게 답한다면?<br><span class="badge badge--amber" style="margin-top:6px">팀 공용 CLAUDE.md 필요</span></div>
+      </div>
+      <div class="card card--green">
+        <div class="card-title">이런 분께 추천</div>
+        <div class="card-body" style="font-size:16px;">
+          ✅ 반복 입력에 지친 분<br>
+          ✅ 팀 AI 사용 표준화가 필요한 분<br>
+          ✅ 출력 형식을 통일하고 싶은 분
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S06 Skills — WHAT ── -->
+<div class="slide" data-slide="6">
+  <div class="slide-topbar">
+    <div class="slide-eyebrow">Skills — WHAT</div>
+    <div class="slide-counter">06 / 26</div>
+  </div>
+  <div class="slide-hdr"><h2>Skills — /슬래시 명령어로 업무를 자동화</h2></div>
+  <div class="slide-body">
+    <div class="info">
+      <div class="info__icon">⚡</div>
+      <div>
+        <div class="info__ttl">한 줄 정의</div>
+        <div class="info__body"><code style="font-family:var(--font-mono);font-size:13px">/명령어</code> 입력 한 번으로 복잡한 반복 작업을 실행하는 커스텀 슬래시 명령어. <strong>SKILL.md 파일 하나</strong>로 정의합니다.</div>
+      </div>
+    </div>
+    <div class="g3">
+      <div class="g-card g-card--hi">
+        <div class="g-card__icon">📁</div>
+        <div class="g-card__title">저장 위치</div>
+        <div class="g-card__body"><code style="font-family:var(--font-mono);font-size:13px">.claude/skills/&lt;name&gt;/SKILL.md</code><br>파일명이 곧 명령어 이름이 됩니다.</div>
+      </div>
+      <div class="g-card">
+        <div class="g-card__icon">⚡</div>
+        <div class="g-card__title">Live Change Detection</div>
+        <div class="g-card__body">SKILL.md를 저장하면 <strong>Claude 재시작 없이 즉시 반영</strong>. 실시간으로 수정하며 테스트 가능.</div>
+      </div>
+      <div class="g-card">
+        <div class="g-card__icon">🔗</div>
+        <div class="g-card__title">$ARGUMENTS 변수</div>
+        <div class="g-card__body"><code style="font-family:var(--font-mono);font-size:13px">/기획서 팀빌딩 신입사원 60분</code> 처럼 명령어 뒤 인자를 자동으로 주입합니다.</div>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="card-title">WHEN — 이럴 때 쓰세요</div>
+        <div class="card-body" style="font-size:16px;">
+          • 같은 양식의 문서를 매번 새로 작성할 때<br>
+          • 특정 프레임워크(STAR, SBI, OKR)를 반복 적용할 때<br>
+          • 팀 전체가 동일한 방식으로 Claude를 써야 할 때
+        </div>
+      </div>
+      <div class="card card--blue">
+        <div class="card-title">실사용 예시</div>
+        <div class="card-body" style="font-size:16px;">
+          <code style="font-family:var(--font-mono);font-size:13px">/기획서 [회의 핵심 3줄]</code><br>
+          <code style="font-family:var(--font-mono);font-size:13px">/수강후기분석 [파일첨부]</code><br>
+          <code style="font-family:var(--font-mono);font-size:13px">/고객답변 [문의유형]</code>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S07 Skills — HOW ── -->
+<div class="slide" data-slide="7">
+  <div class="slide-topbar">
+    <div class="slide-eyebrow">Skills — HOW</div>
+    <div class="slide-counter">07 / 26</div>
+  </div>
+  <div class="slide-hdr"><h2>SKILL.md 작성법 — 지금 바로 만들어 봅시다</h2></div>
+  <div class="slide-body slide-body--cols">
+    <div class="col">
+      <div class="code" style="flex:1;">
+        <div class="code__hdr">
+          <div class="code__dots"><span class="code__dot"></span><span class="code__dot"></span><span class="code__dot"></span></div>
+          <span class="code__file">.claude/skills/교육기획/SKILL.md</span>
+        </div>
+        <button class="copy-btn">복사</button>
+        <div class="code__body"><pre><span class="c-cm">---
+name: 교육기획
+description: 주제와 대상을 입력하면 교육 기획안 초안을 생성합니다
+---</span>
+
+<span class="c-k"># 지시사항</span>
+교육 기획안을 작성합니다.
+Kirkpatrick 4단계 평가 모델 적용.
+
+<span class="c-k"># 입력값</span>
+주제·대상·시간: <span class="c-s">$ARGUMENTS</span>
+
+<span class="c-k"># 출력 형식</span>
+1. 학습 목표 (Bloom 분류 기반)
+2. 커리큘럼 (모듈별 시간 배분)
+3. 평가 방법 (Kirkpatrick 1~4단계)
+4. 준비물 및 주의사항
+
+<span class="c-k"># 제약</span>
+- 반드시 두괄식으로 작성
+- 학습 목표는 동사로 시작</pre></div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card card--blue">
+        <div class="card-title">frontmatter 필수 필드</div>
+        <div class="card-body" style="font-size:16px;">
+          <code style="font-family:var(--font-mono)">name</code>: 슬래시 명령어 이름<br>
+          <code style="font-family:var(--font-mono)">description</code>: Claude가 언제 이 스킬을 쓸지 판단하는 기준
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">호출 방법</div>
+        <div class="card-body" style="font-size:16px;">
+          <code style="font-family:var(--font-mono);font-size:13px">/교육기획 리더십 팀장급 4시간</code><br><br>
+          → <code style="font-family:var(--font-mono)">$ARGUMENTS</code> = "리더십 팀장급 4시간"<br>
+          → Kirkpatrick 기반 기획안 즉시 생성
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">팀 공유 방법</div>
+        <div class="card-body" style="font-size:16px;">
+          <code style="font-family:var(--font-mono);font-size:13px">.claude/</code> 폴더를 git에 커밋<br>
+          → 팀원 전원 같은 Skills 사용<br>
+          → 표준 워크플로우 즉시 배포
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S08 Skills — VALUE ── -->
+<div class="slide" data-slide="8">
+  <div class="slide-topbar">
+    <div class="slide-eyebrow">Skills — VALUE</div>
+    <div class="slide-counter">08 / 26</div>
+  </div>
+  <div class="slide-hdr"><h2>Skills 자가진단 — 나의 반복 업무를 찾아보세요</h2></div>
+  <div class="slide-body">
+    <div class="g2">
+      <div class="card">
+        <div class="card-title">Skills로 자동화하기 좋은 업무</div>
+        <ul class="chk-list" style="margin-top:8px">
+          <li>매주 회의록에서 액션 아이템 추출</li>
+          <li>표준 양식 보고서 초안 작성</li>
+          <li>수강 후기·설문 데이터 분류·분석</li>
+          <li>고객 문의 유형별 답변 초안</li>
+          <li>PR/코드 1차 리뷰 체크리스트</li>
+        </ul>
+      </div>
+      <div class="card card--blue">
+        <div class="card-title">지금 바로 만들 수 있는 Skills</div>
+        <div class="card-body" style="font-size:16px;">
+          <strong>HR/HRD:</strong> <code style="font-family:var(--font-mono);font-size:12px">/수강후기분석</code> · <code style="font-family:var(--font-mono);font-size:12px">/교육기획</code><br><br>
+          <strong>기획자:</strong> <code style="font-family:var(--font-mono);font-size:12px">/기획서</code> · <code style="font-family:var(--font-mono);font-size:12px">/회의록</code><br><br>
+          <strong>개발자:</strong> <code style="font-family:var(--font-mono);font-size:12px">/pr리뷰</code> · <code style="font-family:var(--font-mono);font-size:12px">/테스트케이스</code><br><br>
+          <strong>영업/CS:</strong> <code style="font-family:var(--font-mono);font-size:12px">/고객답변</code> · <code style="font-family:var(--font-mono);font-size:12px">/제안서초안</code>
+        </div>
+      </div>
+    </div>
+    <div class="info info--green">
+      <div class="info__icon">💡</div>
+      <div>
+        <div class="info__ttl">실습 과제</div>
+        <div class="info__body">지금 당장 가장 자주 하는 반복 문서 작업 1개를 골라 SKILL.md를 작성해 보세요. 5분이면 첫 번째 스킬이 완성됩니다.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S09 Hooks — WHAT ── -->
+<div class="slide" data-slide="9">
+  <div class="slide-topbar">
+    <div class="slide-eyebrow">Hooks — WHAT</div>
+    <div class="slide-counter">09 / 26</div>
+  </div>
+  <div class="slide-hdr"><h2>Hooks — Claude의 모든 행동에 규칙을 거는 가드레일</h2></div>
+  <div class="slide-body">
+    <div class="info">
+      <div class="info__icon">🪝</div>
+      <div>
+        <div class="info__ttl">한 줄 정의</div>
+        <div class="info__body">Claude가 도구를 사용하거나 멈출 때 <strong>자동으로 실행되는 셸 명령어</strong>. 위험 명령 차단, 자동 로깅, 알림 전송 등을 코드로 강제합니다.</div>
+      </div>
+    </div>
+    <div class="hook-grid">
+      <div class="hook-ev">
+        <div class="hook-ev__type">PreToolUse</div>
+        <div class="hook-ev__desc">도구 실행 <strong>직전</strong><br>차단·검증에 사용</div>
+      </div>
+      <div class="hook-ev">
+        <div class="hook-ev__type">PostToolUse</div>
+        <div class="hook-ev__desc">도구 실행 <strong>직후</strong><br>로깅·알림에 사용</div>
+      </div>
+      <div class="hook-ev">
+        <div class="hook-ev__type">Stop</div>
+        <div class="hook-ev__desc">Claude <strong>완료 시</strong><br>완료 알림·정리에 사용</div>
+      </div>
+      <div class="hook-ev">
+        <div class="hook-ev__type">SubagentStop</div>
+        <div class="hook-ev__desc">서브에이전트 <strong>완료 시</strong><br>결과 수집에 사용</div>
+      </div>
+    </div>
+    <div class="g3">
+      <div class="card">
+        <div class="card-title">exit 0 — 허용</div>
+        <div class="card-body" style="text-align:center;padding-top:8px"><span class="exit-pill exit-pill--ok">exit 0</span><br><span style="font-size:14px;color:var(--slate);margin-top:8px;display:block">Claude 계속 진행</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">exit 1 — 경고</div>
+        <div class="card-body" style="text-align:center;padding-top:8px"><span class="exit-pill exit-pill--warn">exit 1</span><br><span style="font-size:14px;color:var(--slate);margin-top:8px;display:block">경고 메시지 표시, 진행은 허용</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">exit 2 — 강제 차단</div>
+        <div class="card-body" style="text-align:center;padding-top:8px"><span class="exit-pill exit-pill--block">exit 2</span><br><span style="font-size:14px;color:var(--slate);margin-top:8px;display:block">실행 완전 중단</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S10 Hooks — HOW ── -->
+<div class="slide" data-slide="10">
+  <div class="slide-topbar">
+    <div class="slide-eyebrow">Hooks — HOW</div>
+    <div class="slide-counter">10 / 26</div>
+  </div>
+  <div class="slide-hdr"><h2>Hooks 설정 — 위험 명령 자동 차단 예시</h2></div>
+  <div class="slide-body slide-body--cols">
+    <div class="col">
+      <div class="code" style="flex:1;">
+        <div class="code__hdr">
+          <div class="code__dots"><span class="code__dot"></span><span class="code__dot"></span><span class="code__dot"></span></div>
+          <span class="code__file">.claude/settings.json</span>
+        </div>
+        <button class="copy-btn">복사</button>
+        <div class="code__body"><pre><span class="c-n">{</span>
+  <span class="c-s">"hooks"</span>: <span class="c-n">{</span>
+    <span class="c-s">"PreToolUse"</span>: [<span class="c-n">{</span>
+      <span class="c-s">"matcher"</span>: <span class="c-s">"Bash"</span>,
+      <span class="c-s">"hooks"</span>: [<span class="c-n">{</span>
+        <span class="c-s">"type"</span>: <span class="c-s">"command"</span>,
+        <span class="c-s">"command"</span>: <span class="c-s">"if echo \"$CLAUDE_TOOL_INPUT\" | grep -q 'rm -rf'; then echo '위험 명령어 차단됨'; exit 2; fi"</span>
+      <span class="c-n">}]</span>
+    <span class="c-n">}]</span>,
+    <span class="c-s">"PostToolUse"</span>: [<span class="c-n">{</span>
+      <span class="c-s">"matcher"</span>: "Write",
+      <span class="c-s">"hooks"</span>: [<span class="c-n">{</span>
+        <span class="c-s">"type"</span>: <span class="c-s">"command"</span>,
+        <span class="c-s">"command"</span>: <span class="c-s">"echo \"[LOG] 파일 수정: $(date)\" >> ~/claude-log.txt"</span>
+      <span class="c-n">}]</span>
+    <span class="c-n">}]</span>
+  <span class="c-n">}</span>
+<span class="c-n">}</span></pre></div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card card--blue">
+        <div class="card-title">위 설정이 하는 일</div>
+        <div class="card-body" style="font-size:16px;">
+          🛡️ <code style="font-family:var(--font-mono);font-size:12px">rm -rf</code> 명령 감지 시 <strong>즉시 차단</strong><br>
+          📝 파일 수정 시마다 <strong>자동 로그</strong> 기록<br><br>
+          matcher: "Bash" → bash 명령만 검사<br>
+          matcher: "Write" → 파일 쓰기만 검사<br>
+          matcher: "*" → 모든 도구 검사
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">활용 아이디어</div>
+        <div class="card-body" style="font-size:16px;">
+          • <strong>Stop hook:</strong> 작업 완료 시 슬랙 알림 전송<br>
+          • <strong>PreToolUse:</strong> prod DB 접근 전 확인 요청<br>
+          • <strong>PostToolUse:</strong> git push 후 CI 상태 확인<br>
+          • <strong>SubagentStop:</strong> 에이전트 결과 자동 저장
+        </div>
+      </div>
+      <div class="info info--amber">
+        <div class="info__icon">⚠️</div>
+        <div>
+          <div class="info__ttl">주의</div>
+          <div class="info__body">Hook 스크립트는 Claude와 같은 권한으로 실행됩니다. 신뢰할 수 없는 코드를 Hook에 넣지 마세요.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S11 Hooks — VALUE ── -->
+<div class="slide" data-slide="11">
+  <div class="slide-topbar">
+    <div class="slide-eyebrow">Hooks — VALUE</div>
+    <div class="slide-counter">11 / 26</div>
+  </div>
+  <div class="slide-hdr"><h2>Hooks 자가진단 — 우리 팀에 필요한 가드레일은?</h2></div>
+  <div class="slide-body">
+    <div class="g2">
+      <div class="card">
+        <div class="card-title">지금 당장 유용한 Hook 시나리오</div>
+        <ul class="chk-list" style="margin-top:8px">
+          <li>Claude가 민감 파일(.env) 수정 시 차단</li>
+          <li>작업 완료 시 슬랙·카카오 알림 자동 발송</li>
+          <li>특정 브랜치에만 push 허용</li>
+          <li>매 파일 수정 시 변경 이력 자동 기록</li>
+          <li>외부 API 호출 전 비용 확인 메시지</li>
+        </ul>
+      </div>
+      <div class="card card--blue">
+        <div class="card-title">Hooks vs CLAUDE.md 차이</div>
+        <div class="card-body" style="font-size:16px;">
+          <strong>CLAUDE.md</strong>: Claude에게 "하지 마"라고 부탁<br>
+          → Claude가 실수로 지키지 않을 수 있음<br><br>
+          <strong>Hooks (exit 2)</strong>: 코드로 강제 차단<br>
+          → Claude가 원해도 실행 불가<br><br>
+          <span class="badge badge--green">중요 규칙은 Hooks로 강제하세요</span>
+        </div>
+      </div>
+    </div>
+    <div class="info info--green">
+      <div class="info__icon">💡</div>
+      <div>
+        <div class="info__ttl">실습 과제</div>
+        <div class="info__body">우리 팀에서 Claude가 절대 해서는 안 되는 행동 1가지를 찾아 <code style="font-family:var(--font-mono);font-size:13px">PreToolUse</code> Hook으로 차단해 보세요.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S12 Subagents — WHAT ── -->
+<div class="slide" data-slide="12">
+  <div class="slide-topbar">
+    <div class="slide-eyebrow">Subagents — WHAT</div>
+    <div class="slide-counter">12 / 26</div>
+  </div>
+  <div class="slide-hdr"><h2>Subagents — 여러 Claude가 동시에 일합니다</h2></div>
+  <div class="slide-body">
+    <div class="info">
+      <div class="info__icon">🤖</div>
+      <div>
+        <div class="info__ttl">한 줄 정의</div>
+        <div class="info__body">복잡한 작업을 여러 <strong>전문 에이전트</strong>에게 분배해서 <strong>병렬로 처리</strong>하는 기능. 내가 지시하면 각 에이전트가 독립적으로 작업하고 결과를 취합합니다.</div>
+      </div>
+    </div>
+    <div class="g3">
+      <div class="g-card g-card--hi">
+        <div class="g-card__icon">🔍</div>
+        <div class="g-card__title">Explore</div>
+        <div class="g-card__body">코드베이스·파일 탐색 전문. "이 프로젝트에 버그가 어디 있어?" 같은 탐색 작업에 최적화.</div>
+      </div>
+      <div class="g-card g-card--hi">
+        <div class="g-card__icon">📐</div>
+        <div class="g-card__title">Plan</div>
+        <div class="g-card__body">구현 계획·아키텍처 설계 전문. "이걸 어떻게 만들어야 할까?" 같은 설계 작업에 최적화.</div>
+      </div>
+      <div class="g-card g-card--hi">
+        <div class="g-card__icon">🛠️</div>
+        <div class="g-card__title">general-purpose</div>
+        <div class="g-card__body">범용 에이전트. 웹 검색, 파일 읽기/쓰기, 코드 실행 등 다양한 작업 처리.</div>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="card-title">WHEN — 이럴 때 쓰세요</div>
+        <div class="card-body" style="font-size:16px;">
+          • 리서치 + 초안 작성을 동시에 해야 할 때<br>
+          • 여러 파일을 독립적으로 분석할 때<br>
+          • 회의록 정리 + 성과 보고서를 병렬로 만들 때
+        </div>
+      </div>
+      <div class="card card--blue">
+        <div class="card-title">주의 사항</div>
+        <div class="card-body" style="font-size:16px;">
+          ❌ Subagent 안에서 다시 Subagent 생성 불가 (중첩 금지)<br>
+          ❌ Subagent끼리 직접 통신 불가<br>
+          ✅ 메인 Claude가 결과를 취합
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S13 Subagents — HOW ── -->
+<div class="slide" data-slide="13">
+  <div class="slide-topbar">
+    <div class="slide-eyebrow">Subagents — HOW</div>
+    <div class="slide-counter">13 / 26</div>
+  </div>
+  <div class="slide-hdr"><h2>커스텀 Subagent 정의 — agents/ 폴더에 파일 하나면 됩니다</h2></div>
+  <div class="slide-body slide-body--cols">
+    <div class="col">
+      <div class="code" style="flex:1;">
+        <div class="code__hdr">
+          <div class="code__dots"><span class="code__dot"></span><span class="code__dot"></span><span class="code__dot"></span></div>
+          <span class="code__file">.claude/agents/회의록정리.md</span>
+        </div>
+        <button class="copy-btn">복사</button>
+        <div class="code__body"><pre><span class="c-cm">---
+name: 회의록정리
+description: 회의 내용을 받아 액션 아이템과
+  결정사항을 구조화합니다
+tools: [Read, Write]
+---</span>
+
+<span class="c-k">## 역할</span>
+당신은 회의록 정리 전문가입니다.
+회의 내용에서 중요한 것만 추출합니다.
+
+<span class="c-k">## 출력 형식</span>
+<span class="c-s">### 결정 사항</span>
+- (항목별 기재)
+
+<span class="c-s">### 액션 아이템</span>
+| 내용 | 담당자 | 기한 |
+|------|--------|------|
+
+<span class="c-k">## 규칙</span>
+- 발언자 이름·직책 제거
+- 액션 아이템은 담당자 명시 필수
+- 모호한 항목은 질문 형식으로 표시</pre></div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card card--blue">
+        <div class="card-title">frontmatter 주요 필드</div>
+        <div class="card-body" style="font-size:16px;">
+          <code style="font-family:var(--font-mono)">name</code>: 에이전트 이름<br>
+          <code style="font-family:var(--font-mono)">description</code>: 언제 이 에이전트를 쓸지<br>
+          <code style="font-family:var(--font-mono)">tools</code>: 허용 도구 목록 (보안 제한)
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">호출 예시</div>
+        <div class="card-body" style="font-size:16px;">
+          <code style="font-family:var(--font-mono);font-size:12px">"오늘 팀 미팅 내용이야. 회의록정리 에이전트로 정리해줘."</code><br><br>
+          또는 병렬 처리:<br>
+          <code style="font-family:var(--font-mono);font-size:12px">"회의록 정리 + 다음 주 아젠다 준비를 동시에 해줘."</code>
+        </div>
+      </div>
+      <div class="card card--green">
+        <div class="card-title">팀 활용 아이디어</div>
+        <div class="card-body" style="font-size:16px;">
+          • 회의록정리 에이전트<br>
+          • 성과요약 에이전트<br>
+          • 수강후기분석 에이전트<br>
+          → 팀원 전원이 동일하게 사용
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S14 Subagents — VALUE ── -->
+<div class="slide" data-slide="14">
+  <div class="slide-topbar">
+    <div class="slide-eyebrow">Subagents — VALUE</div>
+    <div class="slide-counter">14 / 26</div>
+  </div>
+  <div class="slide-hdr"><h2>Subagents 자가진단 — 병렬 처리로 시간을 아끼세요</h2></div>
+  <div class="slide-body">
+    <div class="g2">
+      <div class="card">
+        <div class="card-title">지금 당장 병렬화 가능한 업무</div>
+        <ul class="chk-list" style="margin-top:8px">
+          <li>리서치 + 보고서 초안 동시 작업</li>
+          <li>여러 파일의 독립적 번역·요약</li>
+          <li>회의록 정리 + 다음 아젠다 준비</li>
+          <li>여러 채널 고객 문의 동시 답변 초안</li>
+          <li>여러 팀원 주간 보고 취합·요약</li>
+        </ul>
+      </div>
+      <div class="card card--blue">
+        <div class="card-title">Subagents vs 단일 Claude 비교</div>
+        <div class="card-body" style="font-size:16px;">
+          <strong>단일 Claude</strong>: A완료 → B완료 → C완료 (직렬)<br>
+          <strong>Subagents</strong>: A+B+C 동시 (병렬)<br><br>
+          3개 작업 각 10분 → 단일: 30분 vs Subagents: <strong>~12분</strong><br><br>
+          <span class="badge badge--green">복잡할수록 효과 극대화</span>
+        </div>
+      </div>
+    </div>
+    <div class="info info--green">
+      <div class="info__icon">💡</div>
+      <div>
+        <div class="info__ttl">실습 과제</div>
+        <div class="info__body">내 업무 중 "A가 끝나야 B를 할 수 있는" 구조가 아닌 것들을 찾아보세요. 그게 바로 Subagents 대상입니다.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S15 MCP — WHAT ── -->
+<div class="slide" data-slide="15">
+  <div class="slide-topbar">
+    <div class="slide-eyebrow">MCP — WHAT</div>
+    <div class="slide-counter">15 / 26</div>
+  </div>
+  <div class="slide-hdr"><h2>MCP — Claude가 외부 도구를 직접 쓰게 하는 표준 프로토콜</h2></div>
+  <div class="slide-body">
+    <div class="info">
+      <div class="info__icon">🔌</div>
+      <div>
+        <div class="info__ttl">한 줄 정의</div>
+        <div class="info__body">Model Context Protocol — Claude가 <strong>GitHub, Google Drive, Slack, 데이터베이스</strong> 등 외부 서비스를 직접 읽고 쓸 수 있게 연결하는 공개 표준.</div>
+      </div>
+    </div>
+    <div class="g3">
+      <div class="g-card">
+        <div class="g-card__icon">🌐</div>
+        <div class="g-card__title">MCP Registry</div>
+        <div class="g-card__body">공식 MCP 서버 목록. GitHub, Slack, Notion, Google Drive 등 검증된 서버 즉시 사용 가능.<br><span style="font-family:var(--font-mono);font-size:12px">claude mcp search</span>로 검색.</div>
+      </div>
+      <div class="g-card">
+        <div class="g-card__icon">🔒</div>
+        <div class="g-card__title">scope 3단계</div>
+        <div class="g-card__body">
+          <code style="font-family:var(--font-mono);font-size:12px">user</code>: 내 모든 프로젝트<br>
+          <code style="font-family:var(--font-mono);font-size:12px">project</code>: 이 프로젝트만<br>
+          <code style="font-family:var(--font-mono);font-size:12px">local</code>: 이 기기만 (gitignore)
+        </div>
+      </div>
+      <div class="g-card">
+        <div class="g-card__icon">🔑</div>
+        <div class="g-card__title">API 토큰 관리</div>
+        <div class="g-card__body">토큰은 반드시 환경변수로 관리. <code style="font-family:var(--font-mono);font-size:12px">"$GITHUB_TOKEN"</code> 형식 — settings.json에 평문 절대 금지.</div>
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>연결 서비스</th><th>Claude가 할 수 있는 것</th><th>활용 직군</th></tr></thead>
+        <tbody>
+          <tr><td>GitHub</td><td>PR 읽기·댓글 작성·이슈 생성</td><td>개발자</td></tr>
+          <tr><td>Google Drive</td><td>문서 읽기·스프레드시트 수정</td><td>기획·HR</td></tr>
+          <tr><td>Slack</td><td>메시지 전송·채널 읽기</td><td>전 직군</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── S16 MCP — HOW ── -->
+<div class="slide" data-slide="16">
+  <div class="slide-topbar">
+    <div class="slide-eyebrow">MCP — HOW</div>
+    <div class="slide-counter">16 / 26</div>
+  </div>
+  <div class="slide-hdr"><h2>MCP 연결 방법 — CLI 명령어 하나로 시작</h2></div>
+  <div class="slide-body slide-body--cols">
+    <div class="col">
+      <div class="code">
+        <div class="code__hdr">
+          <div class="code__dots"><span class="code__dot"></span><span class="code__dot"></span><span class="code__dot"></span></div>
+          <span class="code__file">터미널 — MCP 서버 추가</span>
+        </div>
+        <div class="code__body"><pre><span class="c-cm"># GitHub MCP 추가 (project scope)</span>
+<span class="c-k">claude mcp add</span> <span class="c-s">@modelcontextprotocol/server-github</span> \
+  <span class="c-n">--scope project</span> \
+  <span class="c-n">-e GITHUB_TOKEN=$GITHUB_TOKEN</span>
+
+<span class="c-cm"># 설치된 MCP 목록 확인</span>
+<span class="c-k">claude mcp list</span>
+
+<span class="c-cm"># MCP 제거</span>
+<span class="c-k">claude mcp remove</span> github</pre></div>
+      </div>
+      <div class="code" style="margin-top:12px">
+        <div class="code__hdr">
+          <div class="code__dots"><span class="code__dot"></span><span class="code__dot"></span><span class="code__dot"></span></div>
+          <span class="code__file">.claude/settings.json — 수동 설정</span>
+        </div>
+        <button class="copy-btn">복사</button>
+        <div class="code__body"><pre><span class="c-n">{</span>
+  <span class="c-s">"mcpServers"</span>: <span class="c-n">{</span>
+    <span class="c-s">"github"</span>: <span class="c-n">{</span>
+      <span class="c-s">"command"</span>: <span class="c-s">"npx"</span>,
+      <span class="c-s">"args"</span>: [<span class="c-s">"-y"</span>, <span class="c-s">"@modelcontextprotocol/server-github"</span>],
+      <span class="c-s">"env"</span>: <span class="c-n">{</span><span class="c-s">"GITHUB_TOKEN"</span>: <span class="c-s">"$GITHUB_TOKEN"</span><span class="c-n">}</span>
+    <span class="c-n">}</span>
+  <span class="c-n">}</span>
+<span class="c-n">}</span></pre></div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card card--blue">
+        <div class="card-title">MCP 사용 예시 (GitHub 연결 후)</div>
+        <div class="card-body" style="font-size:16px;">
+          <code style="font-family:var(--font-mono);font-size:12px">"오늘 올라온 PR 목록 보여줘"</code><br>
+          <code style="font-family:var(--font-mono);font-size:12px">"#123 이슈에 댓글 달아줘"</code><br>
+          <code style="font-family:var(--font-mono);font-size:12px">"main 브랜치 최신 커밋 요약해줘"</code>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">mcp_tool Hooks (v2.1.118+)</div>
+        <div class="card-body" style="font-size:16px;">
+          MCP 도구 호출에도 Hooks 적용 가능.<br>
+          <code style="font-family:var(--font-mono);font-size:12px">matcher: "mcp__github__*"</code> 패턴으로 MCP별 규칙 설정.
+        </div>
+      </div>
+      <div class="info info--amber">
+        <div class="info__icon">⚠️</div>
+        <div>
+          <div class="info__ttl">보안 주의</div>
+          <div class="info__body">MCP 서버는 외부 프로세스입니다. 공식 Registry(<code style="font-family:var(--font-mono);font-size:12px">claude mcp search</code>)에서 검증된 서버만 사용하세요.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S17 MCP — VALUE ── -->
+<div class="slide" data-slide="17">
+  <div class="slide-topbar">
+    <div class="slide-eyebrow">MCP — VALUE</div>
+    <div class="slide-counter">17 / 26</div>
+  </div>
+  <div class="slide-hdr"><h2>MCP 자가진단 — 내 업무 도구를 Claude에 연결하면?</h2></div>
+  <div class="slide-body">
+    <div class="g2">
+      <div class="card">
+        <div class="card-title">MCP로 가능해지는 것</div>
+        <ul class="chk-list" style="margin-top:8px">
+          <li>GitHub PR 자동 1차 리뷰 + 댓글</li>
+          <li>Google Drive 제안서 읽고 맞춤화 초안</li>
+          <li>Slack 채널 분위기 분석 + 주간 보고</li>
+          <li>Notion 데이터베이스 읽고 업데이트</li>
+          <li>Jira 이슈 생성·상태 변경 자동화</li>
+        </ul>
+      </div>
+      <div class="card card--blue">
+        <div class="card-title">5대 기능 종합 비교</div>
+        <div class="card-body" style="font-size:16px;">
+          📄 <strong>CLAUDE.md</strong>: 컨텍스트 설정<br>
+          ⚡ <strong>Skills</strong>: 반복 업무 자동화<br>
+          🪝 <strong>Hooks</strong>: 규칙 강제 + 알림<br>
+          🤖 <strong>Subagents</strong>: 복잡 작업 병렬 처리<br>
+          🔌 <strong>MCP</strong>: 외부 서비스 직접 연결<br><br>
+          → <span class="badge badge--green">조합할수록 강력해집니다</span>
+        </div>
+      </div>
+    </div>
+    <div class="info info--green">
+      <div class="info__icon">💡</div>
+      <div>
+        <div class="info__ttl">실습 과제</div>
+        <div class="info__body">지금 가장 자주 여는 외부 도구(GitHub, Slack, Google Drive...)를 하나 골라 MCP로 연결해 보세요. <code style="font-family:var(--font-mono);font-size:13px">claude mcp search [서비스명]</code>으로 검색합니다.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S18 직군 케이스 — 개발자 ── -->
+<div class="slide" data-slide="18">
+  <div class="slide-topbar">
+    <div class="slide-eyebrow">직군 케이스 — 개발자</div>
+    <div class="slide-counter">18 / 26</div>
+  </div>
+  <div class="slide-hdr"><h2>개발자 케이스 — PR 리뷰 자동화</h2></div>
+  <div class="slide-body">
+  <div class="diagram" style="flex:0 0 auto;height:70px;padding:6px;border-radius:var(--radius);">
+    <img src="assets/img-career-usecase.svg" alt="직군별 Claude Code 활용 케이스 — 5가지 적용 방향">
+  </div>
+  <div style="display:flex;gap:var(--gap-lg);flex:1;min-height:0;">
+    <div class="col">
+      <div class="case-card">
+        <div class="case-card__tag">🧑‍💻 시나리오</div>
+        <h3>PR 리뷰 요청이 쏟아질 때</h3>
+        <div class="case-section">
+          <div class="case-label">Before</div>
+          <div class="case-text">PR 올라오면 팀원이 하나씩 열어서 직접 읽음 → 리뷰 댓글 작성 평균 30~60분. 급하면 형식적 리뷰 → 버그 나중에 발견 → 재작업</div>
+        </div>
+        <div class="case-section">
+          <div class="case-label">After</div>
+          <div class="case-text">PR push 시 Hooks 자동 발동 → AI 1차 리뷰 (네이밍·에러 핸들링·중복 로직 감지) → 사람은 로직 판단만. CLAUDE.md에 코드 스타일·금지 패턴 고정 → 프로젝트마다 재설명 불필요</div>
+        </div>
+        <div class="case-impact">
+          <span>리뷰 시간 60% 단축</span>
+          <span>30~60분 → 10~15분</span>
+          <span>반복 지적 0건</span>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="part-label">🛠️ 기술 구현</div>
+      <div class="code" style="flex:1;">
+        <div class="code__hdr">
+          <div class="code__dots"><span class="code__dot"></span><span class="code__dot"></span><span class="code__dot"></span></div>
+          <span class="code__file">CLAUDE.md — 코드 스타일 섹션</span>
+        </div>
+        <button class="copy-btn">복사</button>
+        <div class="code__body"><pre><span class="c-k">## 코드 리뷰 기준</span>
+<span class="c-cm"># 이 프로젝트의 코딩 규칙</span>
+
+<span class="c-k">## 필수 체크 항목</span>
+- 함수명: 동사+명사 camelCase
+- 에러 처리: try-catch 필수
+- 중복 로직: 3회 이상 시 함수 분리
+
+<span class="c-k">## 금지 패턴</span>
+- any 타입 사용 금지 (TypeScript)
+- console.log 프로덕션 코드 금지
+- 매직 넘버 하드코딩 금지
+
+<span class="c-k">## PR 리뷰 형식</span>
+우선순위: 🔴 필수수정 / 🟡 권고 / 🟢 칭찬
+각 항목: 파일명:라인번호 + 이유 + 수정안</pre></div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- ── S19 직군 케이스 — 기획자 ── -->
+<div class="slide" data-slide="19">
+  <div class="slide-topbar">
+    <div class="slide-eyebrow">직군 케이스 — 기획자</div>
+    <div class="slide-counter">19 / 26</div>
+  </div>
+  <div class="slide-hdr"><h2>기획자 케이스 — 기획서 초안 자동화</h2></div>
+  <div class="slide-body slide-body--cols">
+    <div class="col">
+      <div class="case-card">
+        <div class="case-card__tag">📋 시나리오</div>
+        <h3>회의 후 기획서 초안에 반나절 쏟는 반복</h3>
+        <div class="case-section">
+          <div class="case-label">Before</div>
+          <div class="case-text">회의 종료 → 메모 정리 → 기획서 양식 열기 → 목적·배경·요구사항 직접 타이핑 → 2~3시간. 초안 쓰다가 방향이 맞는지 의심 → 재검토 반복</div>
+        </div>
+        <div class="case-section">
+          <div class="case-label">After</div>
+          <div class="case-text">Skills에 "기획서 초안 생성기" 등록 → <code style="font-family:var(--font-mono);font-size:12px">/기획서 [회의 핵심 3줄]</code> 입력 → 표준 양식 초안 30초 완성. CLAUDE.md에 회사 기획서 포맷·금지 표현·필수 섹션 고정</div>
+        </div>
+        <div class="case-impact">
+          <span>초안 2~3시간 → 30분</span>
+          <span>포맷 통일률 100%</span>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="part-label">🛠️ 기술 구현</div>
+      <div class="code" style="flex:1;">
+        <div class="code__hdr">
+          <div class="code__dots"><span class="code__dot"></span><span class="code__dot"></span><span class="code__dot"></span></div>
+          <span class="code__file">.claude/skills/기획서/SKILL.md</span>
+        </div>
+        <button class="copy-btn">복사</button>
+        <div class="code__body"><pre><span class="c-cm">---
+name: 기획서
+description: 회의 핵심 내용으로 기획서 초안 생성
+---</span>
+
+<span class="c-k"># 지시사항</span>
+회사 표준 기획서 양식으로 초안 작성.
+
+<span class="c-k"># 입력</span>
+회의 내용 / 주제 / 목표: <span class="c-s">$ARGUMENTS</span>
+
+<span class="c-k"># 출력 구조</span>
+1. 배경 및 목적 (2문장)
+2. 추진 범위 및 대상
+3. 주요 요구사항 (bullet 5개 이내)
+4. 기대 효과 (정량 지표 포함)
+5. 일정 및 담당자 (표 형식)
+6. 리스크 및 대응 방안</pre></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S20 직군 케이스 — HR/HRD ── -->
+<div class="slide" data-slide="20">
+  <div class="slide-topbar">
+    <div class="slide-eyebrow">직군 케이스 — HR/HRD</div>
+    <div class="slide-counter">20 / 26</div>
+  </div>
+  <div class="slide-hdr"><h2>HR/HRD 케이스 — 교육 기획 + 수강후기 분석</h2></div>
+  <div class="slide-body slide-body--cols">
+    <div class="col">
+      <div class="case-card">
+        <div class="case-card__tag">🎓 시나리오</div>
+        <h3>교육 기획 + 수강후기 100건 분석</h3>
+        <div class="case-section">
+          <div class="case-label">Before</div>
+          <div class="case-text">과정 기획 목표·대상·커리큘럼 직접 작성 (3~4시간). 수강후기 100건 → 엑셀로 직접 정리 → 인사이트 도출 (반나절)</div>
+        </div>
+        <div class="case-section">
+          <div class="case-label">After</div>
+          <div class="case-text">Projects에 "HRD 과정 설계" 생성 → CLAUDE.md에 Kirkpatrick 4단계·Bloom 분류 고정. <code style="font-family:var(--font-mono);font-size:12px">/수강후기분석</code> Skills → AI가 긍/부정 분류 + 개선 포인트 자동 추출</div>
+        </div>
+        <div class="case-impact">
+          <span>기획 3~4시간 → 1시간</span>
+          <span>후기 분석 반나절 → 10분</span>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="part-label">🛠️ 기술 구현</div>
+      <div class="code" style="flex:1;">
+        <div class="code__hdr">
+          <div class="code__dots"><span class="code__dot"></span><span class="code__dot"></span><span class="code__dot"></span></div>
+          <span class="code__file">.claude/skills/수강후기분석/SKILL.md</span>
+        </div>
+        <button class="copy-btn">복사</button>
+        <div class="code__body"><pre><span class="c-cm">---
+name: 수강후기분석
+description: 수강 후기 파일을 분류·분석하여
+  개선 포인트를 추출합니다
+---</span>
+
+<span class="c-k"># 지시사항</span>
+수강 후기를 분석하여 보고서 작성.
+
+<span class="c-k"># 분석 항목</span>
+1. 긍정/부정/중립 비율 (%)
+2. 긍정 키워드 Top 5
+3. 개선 요구 키워드 Top 5
+4. 강사 관련 피드백 분리
+5. 다음 기수 개선 제언 3가지
+
+<span class="c-k"># 제약</span>
+- 수강생 이름 절대 출력 금지
+- 수치는 후기 건수 대비 % 표기</pre></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S21 직군 케이스 — 리더/팀장 ── -->
+<div class="slide" data-slide="21">
+  <div class="slide-topbar">
+    <div class="slide-eyebrow">직군 케이스 — 리더/팀장</div>
+    <div class="slide-counter">21 / 26</div>
+  </div>
+  <div class="slide-hdr"><h2>리더·팀장 케이스 — 회의록 + 성과 보고 병렬 처리</h2></div>
+  <div class="slide-body slide-body--cols">
+    <div class="col">
+      <div class="case-card">
+        <div class="case-card__tag">👔 시나리오</div>
+        <h3>회의록 정리 + 팀원 성과 보고서 초안</h3>
+        <div class="case-section">
+          <div class="case-label">Before</div>
+          <div class="case-text">주간 회의 60분 → 회의록 정리 30분 → 액션 아이템 추출 + 담당자 배분 → 총 90분. 월말 성과 보고서: 팀원 4~5명 업무 취합 → 요약 → 경영진 보고용 변환 → 2~3시간</div>
+        </div>
+        <div class="case-section">
+          <div class="case-label">After</div>
+          <div class="case-text">Subagents: "회의록 정리 에이전트" + "성과 요약 에이전트" 병렬 운용. 회의록 붙여넣기 → 자동으로 액션 아이템·담당자·기한 추출</div>
+        </div>
+        <div class="case-impact">
+          <span>회의 정리 90분 → 15분</span>
+          <span>월말 보고서 2~3시간 → 30분</span>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="part-label">🛠️ 기술 구현</div>
+      <div class="code" style="flex:1;">
+        <div class="code__hdr">
+          <div class="code__dots"><span class="code__dot"></span><span class="code__dot"></span><span class="code__dot"></span></div>
+          <span class="code__file">CLAUDE.md — 보고서 포맷 섹션</span>
+        </div>
+        <button class="copy-btn">복사</button>
+        <div class="code__body"><pre><span class="c-k">## 보고서 포맷</span>
+
+<span class="c-k">### 회의록 형식</span>
+- 결정 사항 (번호 목록)
+- 액션 아이템 | 담당자 | 기한 (표)
+- 다음 회의 아젠다
+
+<span class="c-k">### 성과 보고 형식</span>
+<span class="c-cm"># 경영진 보고용 — 간결·수치 중심</span>
+- 이번 달 주요 성과 (3줄)
+- 목표 대비 달성률 (%)
+- 다음 달 집중 과제 (2개)
+
+<span class="c-k">### 직급별 어조</span>
+- 경영진 보고: 결론 → 수치 → 다음 단계
+- 팀원 공유: 맥락 → 결론 → 요청사항</pre></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S22 직군 케이스 — 영업/CS ── -->
+<div class="slide" data-slide="22">
+  <div class="slide-topbar">
+    <div class="slide-eyebrow">직군 케이스 — 영업/CS</div>
+    <div class="slide-counter">22 / 26</div>
+  </div>
+  <div class="slide-hdr"><h2>영업·CS 케이스 — 제안서 + 이메일 반자동화</h2></div>
+  <div class="slide-body slide-body--cols">
+    <div class="col">
+      <div class="case-card">
+        <div class="case-card__tag">💼 시나리오</div>
+        <h3>RFP 제안서 초안 + 반복 이메일 답변</h3>
+        <div class="case-section">
+          <div class="case-label">Before</div>
+          <div class="case-text">RFP 수신 → 기존 제안서 뒤지기 → 맞춤화 작업 → 반나절~하루. 고객 문의 메일 하루 20~30건 → 유사 내용 반복 답변 → 2~3시간</div>
+        </div>
+        <div class="case-section">
+          <div class="case-label">After</div>
+          <div class="case-text">MCP(Google Drive) 연결 → 기존 제안서 자동 참조 + 맞춤화 초안 생성. Skills에 "고객 답변 초안" 등록 → 문의 유형별 템플릿 자동 선택 + 커스터마이징</div>
+        </div>
+        <div class="case-impact">
+          <span>제안서 하루 → 2시간</span>
+          <span>반복 메일 2~3시간 → 30분</span>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="part-label">🛠️ 기술 구현</div>
+      <div class="code" style="flex:1;">
+        <div class="code__hdr">
+          <div class="code__dots"><span class="code__dot"></span><span class="code__dot"></span><span class="code__dot"></span></div>
+          <span class="code__file">CLAUDE.md — 고객사별 톤 설정</span>
+        </div>
+        <button class="copy-btn">복사</button>
+        <div class="code__body"><pre><span class="c-k">## 커뮤니케이션 톤</span>
+
+<span class="c-k">### 고객사 규모별 어조</span>
+- 대기업: 격식체·전문 용어 허용
+- 중소기업: 친근하고 실용적
+- 스타트업: 간결·요점 중심
+
+<span class="c-k">### 이메일 구조</span>
+1. 인사 (1줄)
+2. 요약 (1~2줄)
+3. 본문 (bullet 3~5개)
+4. 다음 단계 + 마감일
+5. 클로징 (1줄)
+
+<span class="c-k">## 절대 규칙</span>
+- 가격·계약 조건 임의 제시 금지
+- 경쟁사 언급 금지</pre></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S23 통합 체크리스트 ── -->
+<div class="slide" data-slide="23">
+  <div class="slide-topbar">
+    <div class="slide-eyebrow">통합 체크리스트</div>
+    <div class="slide-counter">23 / 26</div>
+  </div>
+  <div class="slide-hdr"><h2>실무 도입 체크리스트 — 19항목</h2></div>
+  <div class="slide-body slide-body--cols">
+    <div class="col">
+      <div class="card card--blue" style="margin-bottom:8px">
+        <div class="card-title">CLAUDE.md (6항)</div>
+      </div>
+      <ul class="chk-list">
+        <li>프로젝트 루트에 CLAUDE.md 파일 생성 완료</li>
+        <li>역할·규칙·형식·금지어 4섹션 작성</li>
+        <li>개인 User CLAUDE.md (~/.claude/CLAUDE.md) 설정</li>
+        <li>팀 공용 CLAUDE.md git 커밋</li>
+        <li>3회 이상 같은 수정 요청 → 규칙으로 편입</li>
+        <li>API 키·개인정보 CLAUDE.md 미포함 확인</li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="card" style="margin-bottom:8px">
+        <div class="card-title">Skills (4항)</div>
+      </div>
+      <ul class="chk-list" style="margin-bottom:12px">
+        <li>반복 업무 1개 이상 SKILL.md로 정의</li>
+        <li>/명령어 호출 정상 동작 확인</li>
+        <li>$ARGUMENTS 변수 활용</li>
+        <li>팀 공용 Skills git 공유</li>
+      </ul>
+      <div class="card card--green" style="margin-bottom:8px">
+        <div class="card-title">Hooks (3항)</div>
+      </div>
+      <ul class="chk-list" style="margin-bottom:12px">
+        <li>PreToolUse 위험 명령 차단 1개 설정</li>
+        <li>Stop hook 완료 알림 설정</li>
+        <li>exit code 0/1/2 동작 확인</li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="card card--amber" style="margin-bottom:8px">
+        <div class="card-title">Subagents (3항)</div>
+      </div>
+      <ul class="chk-list" style="margin-bottom:12px">
+        <li>내장 3종 (Explore·Plan·general) 각 1회 사용</li>
+        <li>커스텀 에이전트 1개 이상 정의</li>
+        <li>병렬 작업 시나리오 1개 테스트</li>
+      </ul>
+      <div class="card" style="margin-bottom:8px">
+        <div class="card-title">MCP (3항)</div>
+      </div>
+      <ul class="chk-list">
+        <li>MCP 서버 1개 이상 연결</li>
+        <li>API 토큰 환경변수 관리 확인</li>
+        <li>MCP 통해 외부 데이터 읽기 테스트</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ── S24 FAQ + 안티패턴 ── -->
+<div class="slide" data-slide="24">
+  <div class="slide-topbar">
+    <div class="slide-eyebrow">FAQ + 안티패턴</div>
+    <div class="slide-counter">24 / 26</div>
+  </div>
+  <div class="slide-hdr"><h2>자주 묻는 질문 + 실무자가 자주 틀리는 것</h2></div>
+  <div class="slide-body slide-body--cols">
+    <div class="col">
+      <div class="flow">
+        <div class="flow-item">
+          <div class="flow-num">Q</div>
+          <div>
+            <div class="flow-ttl">CLAUDE.md가 너무 길어지면?</div>
+            <div class="flow-desc">300줄 이상이면 오히려 성능 저하. 핵심 규칙만 남기고 상세 내용은 참조 파일로 분리하세요. <code style="font-family:var(--font-mono);font-size:12px">@파일경로</code>로 포함.</div>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-num">Q</div>
+          <div>
+            <div class="flow-ttl">Skills vs CLAUDE.md 차이?</div>
+            <div class="flow-desc">CLAUDE.md = 항상 적용되는 배경 설정. Skills = 특정 명령 시에만 실행되는 액션. 역할은 CLAUDE.md, 작업은 Skills.</div>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-num">Q</div>
+          <div>
+            <div class="flow-ttl">Hooks이 너무 많이 차단해요</div>
+            <div class="flow-desc">exit 2 대신 exit 1로 바꿔 경고만 하도록 조정. 또는 matcher를 더 구체적인 패턴으로 좁히세요.</div>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-num">Q</div>
+          <div>
+            <div class="flow-ttl">MCP 연결했는데 느려요</div>
+            <div class="flow-desc">MCP 서버는 외부 프로세스. 불필요한 서버는 제거하고 자주 쓰는 것만 남기세요. <code style="font-family:var(--font-mono);font-size:12px">claude mcp remove</code>로 정리.</div>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-num">Q</div>
+          <div>
+            <div class="flow-ttl">팀원이 설정을 다르게 쓰면?</div>
+            <div class="flow-desc">Project CLAUDE.md + .claude/skills/ + .claude/settings.json을 git에 커밋 → 팀원 전원 clone 시 동일 환경 자동 적용.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="diagram">
+        <img src="assets/img-antipattern.svg" alt="안티패턴 vs 베스트 프랙티스 — 실무자가 자주 틀리는 5가지">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S25 통합 자가진단 ── -->
+<div class="slide" data-slide="25">
+  <div class="slide-topbar">
+    <div class="slide-eyebrow">통합 자가진단</div>
+    <div class="slide-counter">25 / 26</div>
+  </div>
+  <div class="slide-hdr"><h2>5분 핵심 점검 — 지금 바로 확인</h2></div>
+  <div class="slide-body slide-body--cols">
+    <div class="col">
+      <div class="card card--blue" style="margin-bottom:8px">
+        <div class="card-title">CLAUDE.md</div>
+        <ul class="chk-list">
+          <li>Project 계층 CLAUDE.md를 직접 열어서 작성해봤다</li>
+          <li>4계층 우선순위(Managed Policy &gt; Project &gt; User &gt; Local)를 설명할 수 있다</li>
+        </ul>
+      </div>
+      <div class="card card--green" style="margin-bottom:8px">
+        <div class="card-title">Skills</div>
+        <ul class="chk-list">
+          <li><code style="font-family:var(--font-mono);font-size:12px">.claude/skills/</code> 폴더에 파일을 만들고 <code style="font-family:var(--font-mono);font-size:12px">/명령어</code>로 호출해봤다</li>
+          <li>내 업무에서 Skills로 등록할 반복 작업 1가지를 떠올렸다</li>
+        </ul>
+      </div>
+      <div class="card card--amber" style="margin-bottom:8px">
+        <div class="card-title">Hooks</div>
+        <ul class="chk-list">
+          <li>exit 0 / exit 1 / exit 2 차이를 말할 수 있다</li>
+          <li>PreToolUse exit 2가 어떤 상황에 쓰이는지 안다</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card" style="margin-bottom:8px">
+        <div class="card-title">Subagents</div>
+        <ul class="chk-list">
+          <li>내장 에이전트(Explore·Plan·general-purpose) 3종을 안다</li>
+          <li>내 업무에서 "독립 역할 분리"가 필요한 작업 1가지를 떠올렸다</li>
+        </ul>
+      </div>
+      <div class="card" style="margin-bottom:8px">
+        <div class="card-title">MCP</div>
+        <ul class="chk-list">
+          <li><code style="font-family:var(--font-mono);font-size:12px">claude mcp add</code> 명령어로 서버를 추가하는 흐름을 안다</li>
+          <li>연결하고 싶은 외부 도구 1가지를 골랐다</li>
+        </ul>
+      </div>
+      <div class="info info--green" style="margin-top:4px;">
+        <div class="info__icon">✅</div>
+        <div>
+          <div class="info__ttl">전부 체크됐다면</div>
+          <div class="info__body">체크가 안 되는 항목 → 해당 섹션으로 돌아가 다시 읽기. 이번 주에 1가지만 실제 업무에 적용해 보세요.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S26 다음 단계 ── -->
+<div class="slide slide--cover" data-slide="26">
+  <div class="cover-inner">
+    <div class="cover-tag">다음 단계 · Next Steps</div>
+    <div>
+      <h1 class="cover-h1">지금 바로<br><span>시작하세요</span></h1>
+      <p class="cover-sub" style="margin-top:16px;">오늘 배운 5가지 중 딱 하나만 골라서 지금 바로 적용해 보세요.<br>완벽하게 설정한 후 시작하는 것보다 <strong style="color:var(--blue)">불완전하게라도 쓰기 시작하는 것</strong>이 100배 낫습니다.</p>
+    </div>
+    <div class="g3" style="gap:16px;">
+      <div class="card card--blue">
+        <div class="card-title">오늘 (5분)</div>
+        <div class="card-body" style="font-size:16px;">
+          CLAUDE.md 파일 하나 만들기<br>
+          역할 + 규칙 3줄만 써도 충분
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">이번 주 (30분)</div>
+        <div class="card-body" style="font-size:16px;">
+          반복 업무 1개 → Skills 등록<br>
+          위험 명령 차단 Hook 1개 설정
+        </div>
+      </div>
+      <div class="card card--green">
+        <div class="card-title">이번 달</div>
+        <div class="card-body" style="font-size:16px;">
+          Subagents + MCP 연결<br>
+          팀 전체 설정 git 공유 → 표준화
+        </div>
+      </div>
+    </div>
+    <div style="background:rgba(37,99,235,.07);border:1px solid rgba(37,99,235,.18);border-radius:12px;padding:16px 20px;">
+      <div style="font-family:var(--font-disp);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin-bottom:10px;">공식 참고 자료</div>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--text2);">
+        <div>📖 공식 문서: <code style="font-family:var(--font-mono);font-size:12px">code.claude.com/docs/en/</code></div>
+        <div>🔌 MCP Registry: <code style="font-family:var(--font-mono);font-size:12px">claude mcp search [서비스명]</code></div>
+        <div>⚡ Skills 가이드: <code style="font-family:var(--font-mono);font-size:12px">code.claude.com/docs/en/claude-code/skills</code></div>
+        <div>🤖 Agent SDK: <code style="font-family:var(--font-mono);font-size:12px">npm install @anthropic-ai/claude-agent-sdk</code></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<!-- Nav -->
+<button class="nav-btn nav-btn--prev" id="prev" aria-label="이전">&#8592;</button>
+<button class="nav-btn nav-btn--next" id="next" aria-label="다음">&#8594;</button>
+
+<!-- Dots -->
+<div class="dots" id="dots"></div>
+
+<!-- Progress -->
+<div class="prog-bar"><div class="prog-fill" id="prog"></div></div>
+
+<!-- Lightbox -->
+<div class="lb-overlay" id="lb">
+  <img class="lb-img" id="lb-img" src="" alt="">
+</div>
+
+<script>
+const TOTAL = 26;
+let cur = 1;
+
+const deck = document.getElementById('deck');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+const dotsEl = document.getElementById('dots');
+const prog = document.getElementById('prog');
+const lb = document.getElementById('lb');
+const lbImg = document.getElementById('lb-img');
+
+// dots 생성
+for(let i=1;i<=TOTAL;i++){
+  const d = document.createElement('button');
+  d.className = 'dot' + (i===1?' dot--active':'');
+  d.setAttribute('aria-label','슬라이드 '+i);
+  d.addEventListener('click',()=>go(i));
+  dotsEl.appendChild(d);
+}
+
+function go(n){
+  cur = Math.max(1,Math.min(TOTAL,n));
+  deck.style.transform = `translateX(${-(cur-1)*100}vw)`;
+  prevBtn.disabled = cur===1;
+  nextBtn.disabled = cur===TOTAL;
+  dotsEl.querySelectorAll('.dot').forEach((d,i)=>{
+    d.classList.toggle('dot--active',i+1===cur);
+  });
+  prog.style.width = `${(cur/TOTAL)*100}%`;
+}
+
+prevBtn.addEventListener('click',()=>go(cur-1));
+nextBtn.addEventListener('click',()=>go(cur+1));
+
+document.addEventListener('keydown',e=>{
+  if(lb.classList.contains('lb-active')){if(e.key==='Escape')closeLb();return;}
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')go(cur+1);
+  else if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(cur-1);
+});
+
+// Lightbox
+function openLb(src,alt){lbImg.src=src;lbImg.alt=alt||'';lb.classList.add('lb-active');}
+function closeLb(){lb.classList.remove('lb-active');lbImg.src='';}
+lb.addEventListener('click',closeLb);
+document.querySelectorAll('.diagram img, .col img[src]').forEach(img=>{
+  img.addEventListener('click',e=>{e.stopPropagation();openLb(img.src,img.alt);});
+});
+
+// Copy buttons
+document.querySelectorAll('.copy-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const pre = btn.closest('.code').querySelector('pre');
+    if(!pre) return;
+    navigator.clipboard.writeText(pre.innerText).then(()=>{
+      btn.textContent='복사됨!';btn.classList.add('copied');
+      setTimeout(()=>{btn.textContent='복사';btn.classList.remove('copied');},1800);
+    });
+  });
+});
+
+// swipe
+let tx=0;
+deck.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
+deck.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx;
+  if(Math.abs(dx)>50){if(dx<0)go(cur+1);else go(cur-1);}
+});
+
+go(1);
+</script>
+</body>
+</html>

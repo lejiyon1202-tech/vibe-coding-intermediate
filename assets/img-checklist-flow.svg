@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200"
+     font-family="'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif">
+
+  <!-- 배경 -->
+  <rect width="800" height="200" fill="#EFF6FF" rx="12"/>
+
+  <!-- 제목 -->
+  <text x="400" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#1E3A8A" letter-spacing=".5">
+    Claude Code 실습 체크리스트 — 단계별 흐름
+  </text>
+
+  <!-- 스텝 1 -->
+  <rect x="30" y="38" width="130" height="120" rx="10" fill="white" stroke="#DBEAFE" stroke-width="2"/>
+  <circle cx="95" cy="64" r="18" fill="#DBEAFE"/>
+  <text x="95" y="69" text-anchor="middle" font-size="13" font-weight="800" fill="#1E3A8A">1</text>
+  <text x="95" y="95" text-anchor="middle" font-size="9.5" font-weight="700" fill="#1E3A8A">환경 설정</text>
+  <text x="95" y="109" text-anchor="middle" font-size="8" fill="#64748B">Claude Code</text>
+  <text x="95" y="121" text-anchor="middle" font-size="8" fill="#64748B">CLI 설치</text>
+  <text x="95" y="133" text-anchor="middle" font-size="8" fill="#64748B">인증 완료</text>
+  <rect x="50" y="144" width="90" height="6" rx="3" fill="#DBEAFE"/>
+
+  <!-- 화살표 1→2 -->
+  <polygon points="168,98 180,104 168,110" fill="#2563EB"/>
+  <line x1="160" y1="104" x2="179" y2="104" stroke="#2563EB" stroke-width="2"/>
+
+  <!-- 스텝 2 -->
+  <rect x="182" y="38" width="130" height="120" rx="10" fill="white" stroke="#DBEAFE" stroke-width="2"/>
+  <circle cx="247" cy="64" r="18" fill="#DBEAFE"/>
+  <text x="247" y="69" text-anchor="middle" font-size="13" font-weight="800" fill="#1E3A8A">2</text>
+  <text x="247" y="95" text-anchor="middle" font-size="9.5" font-weight="700" fill="#1E3A8A">CLAUDE.md</text>
+  <text x="247" y="109" text-anchor="middle" font-size="8" fill="#64748B">나의 역할 · 팀</text>
+  <text x="247" y="121" text-anchor="middle" font-size="8" fill="#64748B">금지 표현 정의</text>
+  <text x="247" y="133" text-anchor="middle" font-size="8" fill="#64748B">프로젝트 컨텍스트</text>
+  <rect x="202" y="144" width="90" height="6" rx="3" fill="#DBEAFE"/>
+
+  <!-- 화살표 2→3 -->
+  <polygon points="320,98 332,104 320,110" fill="#2563EB"/>
+  <line x1="312" y1="104" x2="331" y2="104" stroke="#2563EB" stroke-width="2"/>
+
+  <!-- 스텝 3 -->
+  <rect x="334" y="38" width="130" height="120" rx="10" fill="#2563EB"/>
+  <circle cx="399" cy="64" r="18" fill="rgba(255,255,255,0.25)"/>
+  <text x="399" y="69" text-anchor="middle" font-size="13" font-weight="800" fill="white">3</text>
+  <text x="399" y="95" text-anchor="middle" font-size="9.5" font-weight="800" fill="white">첫 실무 과제</text>
+  <text x="399" y="109" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.9)">자연어 지시</text>
+  <text x="399" y="121" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.9)">결과물 확인</text>
+  <text x="399" y="133" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.9)">피드백 반복</text>
+  <rect x="354" y="144" width="90" height="6" rx="3" fill="rgba(255,255,255,0.3)"/>
+
+  <!-- 화살표 3→4 -->
+  <polygon points="472,98 484,104 472,110" fill="#93C5FD"/>
+  <line x1="464" y1="104" x2="483" y2="104" stroke="#93C5FD" stroke-width="2"/>
+
+  <!-- 스텝 4 -->
+  <rect x="486" y="38" width="130" height="120" rx="10" fill="white" stroke="#DBEAFE" stroke-width="2"/>
+  <circle cx="551" cy="64" r="18" fill="#DBEAFE"/>
+  <text x="551" y="69" text-anchor="middle" font-size="13" font-weight="800" fill="#1E3A8A">4</text>
+  <text x="551" y="95" text-anchor="middle" font-size="9.5" font-weight="700" fill="#1E3A8A">Hooks 자동화</text>
+  <text x="551" y="109" text-anchor="middle" font-size="8" fill="#64748B">알림 · 로깅</text>
+  <text x="551" y="121" text-anchor="middle" font-size="8" fill="#64748B">반복 작업 훅</text>
+  <text x="551" y="133" text-anchor="middle" font-size="8" fill="#64748B">워크플로우 연결</text>
+  <rect x="506" y="144" width="90" height="6" rx="3" fill="#DBEAFE"/>
+
+  <!-- 화살표 4→5 -->
+  <polygon points="624,98 636,104 624,110" fill="#93C5FD"/>
+  <line x1="616" y1="104" x2="635" y2="104" stroke="#93C5FD" stroke-width="2"/>
+
+  <!-- 스텝 5 -->
+  <rect x="638" y="38" width="130" height="120" rx="10" fill="#1E3A8A"/>
+  <circle cx="703" cy="64" r="18" fill="rgba(255,255,255,0.2)"/>
+  <text x="703" y="69" text-anchor="middle" font-size="13" font-weight="800" fill="white">5</text>
+  <text x="703" y="95" text-anchor="middle" font-size="9.5" font-weight="800" fill="white">팀 공유</text>
+  <text x="703" y="109" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.9)">Skills 등록</text>
+  <text x="703" y="121" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.9)">MCP 연결</text>
+  <text x="703" y="133" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.9)">팀 표준화</text>
+  <rect x="658" y="144" width="90" height="6" rx="3" fill="rgba(255,255,255,0.3)"/>
+
+  <!-- 하단 진행바 -->
+  <rect x="30" y="172" width="740" height="8" rx="4" fill="#DBEAFE"/>
+  <rect x="30" y="172" width="444" height="8" rx="4" fill="#2563EB"/>
+  <text x="400" y="192" text-anchor="middle" font-size="8.5" fill="#64748B">3단계 첫 실무 과제 완료 = 중간 난이도 핵심 달성 포인트</text>
+
+</svg>
